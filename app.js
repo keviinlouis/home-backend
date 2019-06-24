@@ -1,22 +1,31 @@
-const app = require('express')();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const port = process.env.NODE_PORT || 4000;
 
-app.get('/', function (req, res) {
-    res.sendFile(__dirname + '/index.html');
+const path = require('path');
+const fs = require('fs');
+
+const bodyParser = require('body-parser');
+const express = require('express');
+const server = express();
+
+
+server.use(bodyParser.urlencoded({extended: true}));
+server.use(bodyParser.json());
+
+
+//Routes
+const directoryPath = path.join(__dirname, 'routes');
+//passsing directoryPath and callback function
+fs.readdir(directoryPath, function (err, files) {
+    if (err) {
+        return console.log('Unable to scan directory: ' + err);
+    }
+    files.forEach(function (file) {
+        const route = require('./routes/'+file);
+        server.use(route);
+    });
 });
 
-let count = 0;
-
-io.on('connection', function (socket) {
-    console.log('a user connected');
-
-    socket.on('add', number => {
-        count += parseInt(number);
-        socket.broadcast.emit('changed', count)
-    })
+server.listen(port, '0.0.0.0', function () {
+    console.log('Listening on '+port);
 });
 
-http.listen(3000, function () {
-    console.log('listening on *:3000');
-});
