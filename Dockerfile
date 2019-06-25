@@ -1,11 +1,12 @@
 FROM node:latest
-RUN mkdir -p /home_back
-WORKDIR /home_back/
 
-COPY . /home_back/
-COPY package.json /usr/src/app/
-RUN npm install
-COPY . /usr/src/app
 RUN npm i -g nodemon
-EXPOSE 3000
+
+ENV APP_HOME /home_back
+RUN mkdir -p $APP_HOME
+WORKDIR $APP_HOME
+
+ADD . $APP_HOME
+
+EXPOSE 4000
 CMD [ "npm", "start" ]

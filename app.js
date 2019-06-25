@@ -14,7 +14,7 @@ server.use(bodyParser.json());
 
 //Routes
 const directoryPath = path.join(__dirname, 'routes');
-//passsing directoryPath and callback function
+
 fs.readdir(directoryPath, function (err, files) {
     if (err) {
         return console.log('Unable to scan directory: ' + err);
