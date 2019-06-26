@@ -1,16 +1,18 @@
-const port = process.env.NODE_PORT || 4000;
-
 const path = require('path');
 const fs = require('fs');
-
 const bodyParser = require('body-parser');
 const express = require('express');
-const server = express();
 
+require('./db');
+
+const server = express();
 
 server.use(bodyParser.urlencoded({extended: true}));
 server.use(bodyParser.json());
 
+server.use(function (err, req, res, next) {
+    res.status(err.status || 500).json({status: err.status, message: err.message})
+});
 
 //Routes
 const directoryPath = path.join(__dirname, 'routes');
@@ -25,7 +27,4 @@ fs.readdir(directoryPath, function (err, files) {
     });
 });
 
-server.listen(port, '0.0.0.0', function () {
-    console.log('Listening on '+port);
-});
-
+module.exports = server;
