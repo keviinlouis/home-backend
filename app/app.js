@@ -2,17 +2,14 @@ const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const express = require('express');
+require('express-async-errors');
 
 require('./db');
 
-const server = express();
+const app = express();
 
-server.use(bodyParser.urlencoded({extended: true}));
-server.use(bodyParser.json());
-
-server.use(function (err, req, res, next) {
-    res.status(err.status || 500).json({status: err.status, message: err.message})
-});
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
 
 //Routes
 const directoryPath = path.join(__dirname, 'routes');
@@ -23,8 +20,8 @@ fs.readdir(directoryPath, function (err, files) {
     }
     files.forEach(function (file) {
         const route = require('./routes/'+file);
-        server.use(route);
+        app.use(route);
     });
 });
 
-module.exports = server;
+module.exports = app;

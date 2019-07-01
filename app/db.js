@@ -1,8 +1,12 @@
 //Import the mongoose module
-let mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
+
+mongoose.plugin(uniqueValidator);
 
 //Set up default mongoose connection
 let mongoUrl = 'mongodb://mongo:27017/home';
+
 mongoose.connect(mongoUrl, { useNewUrlParser: true });
 
 //Get the default connection
