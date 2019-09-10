@@ -1,0 +1,22 @@
+{
+  "name": "home-auth",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "nodemon bin/server.js"
+  },
+  "dependencies": {
+    "async-redis": "^1.1.7",
+    "bcrypt": "^3.0.6",
+    "body-parser": "^1.19.0",
+    "dotenv-safe": "^8.1.0",
+    "express": "4.16.4",
+    "express-async-errors": "^3.1.1",
+    "express-ws": "^4.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.6.0",
+    "mongoose-unique-validator": "^2.0.3",
+    "node-restful": "^0.2.6",
+    "socket.io": "2.2.0"
+  }
+}
