@@ -13,6 +13,13 @@ router.use((err, req, res, next) => {
     if(err.name === "TokenExpiredError"){
         return res.status(401).json({error: 'Sessão Expirada'})
     }
+    if(err.name === "MongoError" && err.code === 11000){
+        return res.status(400).json({
+            "email": {
+                "message": "O campo email precisa ser único."
+            }
+        })
+    }
     console.log(err)
     res.status(500).json(err)
 });

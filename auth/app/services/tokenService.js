@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
 const redisClient = require('../redis');
 
-const secret = process.env.JWT_SECRET;
-const ttl = process.env.JWT_TTL;
+const secret = process.env.JWT_SECRET || 'secret';
+const ttl = process.env.JWT_TTL || 36000;
 
 class TokenService {
     static sign(payload) {

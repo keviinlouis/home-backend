@@ -9,7 +9,7 @@ exports.login = async (req, res) => {
     if (!user) {
         return res.status(404).json({error: 'NOT_FOUNDED'})
     }
-    // test a matching password
+
     const isMatch = await user.comparePassword(password);
 
     if (!isMatch) {
@@ -50,6 +50,6 @@ exports.validateToken = async (req, res) => {
         res.set('refreshToken', TokenService.refreshTokenAndBlacklist(token))
     }
 
-    return res.status(201).json(user.toResponse());
+    return res.status(200).json(user.toResponse());
 };
 

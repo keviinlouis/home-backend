@@ -4,8 +4,10 @@ const uniqueValidator = require('mongoose-unique-validator');
 
 mongoose.plugin(uniqueValidator, { message: 'O campo {PATH} precisa ser único.' });
 
+const databaseName = process.env.NODE_ENV === 'test' ? 'home_test' : 'home';
+
 //Set up default mongoose connection
-let mongoUrl = process.env.MONGO_URL + '/home';
+let mongoUrl = process.env.MONGO_URL + '/' + databaseName;
 
 mongoose.connect(mongoUrl, { useNewUrlParser: true });
 

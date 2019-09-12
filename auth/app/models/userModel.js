@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const {validateEmail} = require('../validations');
 const TokenService = require('../services/tokenService');
 const SALT_WORK_FACTOR = 10;
-const jwt = require('jsonwebtoken');
 
 const schema = {
     email: {
@@ -14,7 +13,6 @@ const schema = {
         unique: [true, 'Este email já existe'],
         required: 'Você precisa de um email',
         validate: [validateEmail, 'Este email é inválido'],
-        createIndexes: {unique: true},
     },
     name: {
         type: String,
