@@ -1,5 +1,6 @@
 //Require Mongoose
 const {Schema, model} = require('mongoose');
+const mongooseDelete = require('mongoose-delete');
 const bcrypt = require('bcrypt');
 const {validateEmail} = require('../validations');
 const TokenService = require('../services/tokenService');
@@ -33,6 +34,7 @@ const options = {
 //Define a schema
 let UserModelSchema = Schema(schema, options);
 
+UserModelSchema.plugin(mongooseDelete, { deletedAt: true, overrideMethods: true });
 
 UserModelSchema.pre('save', async function (next) {
     const user = this;

@@ -22,6 +22,8 @@ const auth = async function (req, res, next) {
         return res.status(404).json({error: 'Usuário não encontrado'})
     }
 
+    req.user = user;
+
     const isExpired = TokenService.isExpired(tokenCleared);
 
     if(isExpired){

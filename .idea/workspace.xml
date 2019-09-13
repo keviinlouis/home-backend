@@ -2,15 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2d3a60e9-ae35-4938-add9-12b6df913dc3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/auth/tests/controllers/authController.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/auth/tests/controllers/userController.test.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/app/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/app/controllers/authController.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/controllers/authController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/app/db.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/db.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/app/controllers/userController.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/controllers/userController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/app/middlewares.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/middlewares.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth/app/models/userModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/models/userModel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/app/routes/authRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/routes/authRoutes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/app/services/tokenService.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/services/tokenService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/bin/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/bin/server.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/auth/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/auth/package.json" afterDir="false" />
     </list>
@@ -38,12 +34,21 @@
     </ExecCommand>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/auth/tests/controllers/userController.test.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="100">
+              <caret line="56" column="53" lean-forward="true" selection-start-line="56" selection-start-column="53" selection-end-line="56" selection-end-column="53" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/auth/tests/controllers/authController.test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="423">
-              <caret line="188" column="52" selection-start-line="188" selection-start-column="52" selection-end-line="188" selection-end-column="52" />
+            <state relative-caret-position="304">
+              <caret line="143" column="58" selection-start-line="140" selection-start-column="11" selection-end-line="143" selection-end-column="58" />
             </state>
           </provider>
         </entry>
@@ -51,35 +56,62 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/auth/app/models/userModel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="58" selection-start-line="58" selection-end-line="58" />
+            <state relative-caret-position="-204">
+              <caret line="38" column="46" selection-start-line="38" selection-start-column="46" selection-end-line="38" selection-end-column="46" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/auth/app/controllers/authController.js">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/auth/app/controllers/userController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="49" column="29" selection-start-line="49" selection-start-column="17" selection-end-line="49" selection-end-column="29" />
+            <state relative-caret-position="315">
+              <caret line="21" column="9" lean-forward="true" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/auth/app/services/tokenService.js">
+        <entry file="file://$PROJECT_DIR$/auth/app/routes/userRoutes.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="15" lean-forward="true" selection-start-line="3" selection-start-column="15" selection-end-line="3" selection-end-column="49" />
+            <state relative-caret-position="330">
+              <caret line="22" selection-start-line="22" selection-end-line="22" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/auth/app/db.js">
+        <entry file="file://$PROJECT_DIR$/auth/app/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="25" selection-start-line="25" selection-end-line="25" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/auth/app/redis.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/auth/app/middlewares.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="360">
+              <caret line="24" column="20" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/auth/package.json">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="90">
-              <caret line="6" column="76" selection-start-line="6" selection-start-column="76" selection-end-line="6" selection-end-column="76" />
+              <caret line="6" column="64" selection-start-line="6" selection-start-column="50" selection-end-line="6" selection-end-column="64" />
             </state>
           </provider>
         </entry>
@@ -150,10 +182,8 @@
         <option value="$PROJECT_DIR$/auth/app/redis.js" />
         <option value="$PROJECT_DIR$/auth/app/helpers.js" />
         <option value="$PROJECT_DIR$/auth/app/routes/userRoutes.js" />
-        <option value="$PROJECT_DIR$/auth/app/controllers/userController.js" />
         <option value="$PROJECT_DIR$/auth/.gitignore" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/auth/app/middlewares.js" />
         <option value="$PROJECT_DIR$/auth/tests/test.js" />
         <option value="$PROJECT_DIR$/auth/bin/server.js" />
         <option value="$PROJECT_DIR$/auth/tests/controllers/userController.js" />
@@ -162,18 +192,21 @@
         <option value="$PROJECT_DIR$/auth/.env" />
         <option value="$PROJECT_DIR$/auth/app/db.js" />
         <option value="$PROJECT_DIR$/auth/app/services/tokenService.js" />
-        <option value="$PROJECT_DIR$/auth/app/app.js" />
         <option value="$PROJECT_DIR$/auth/tests/helpers.js" />
         <option value="$PROJECT_DIR$/auth/tests/controllers/authController.js" />
-        <option value="$PROJECT_DIR$/auth/package.json" />
         <option value="$PROJECT_DIR$/auth/app/routes/authRoutes.js" />
         <option value="$PROJECT_DIR$/auth/app/controllers/authController.js" />
-        <option value="$PROJECT_DIR$/auth/app/models/userModel.js" />
         <option value="$PROJECT_DIR$/auth/tests/controllers/authController.test.js" />
+        <option value="$PROJECT_DIR$/auth/package.json" />
+        <option value="$PROJECT_DIR$/auth/app/app.js" />
+        <option value="$PROJECT_DIR$/auth/app/middlewares.js" />
+        <option value="$PROJECT_DIR$/auth/app/models/userModel.js" />
+        <option value="$PROJECT_DIR$/auth/tests/controllers/userController.test.js" />
+        <option value="$PROJECT_DIR$/auth/app/controllers/userController.js" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="x" value="719" />
     <option name="width" value="961" />
     <option name="height" value="1050" />
@@ -184,7 +217,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -254,6 +286,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -267,18 +300,18 @@
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/auth/tests/controllers" />
-      <recent name="$PROJECT_DIR$/auth/app/routes" />
-      <recent name="$PROJECT_DIR$/auth/app/controllers" />
-      <recent name="$PROJECT_DIR$/routes" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/auth/app" />
       <recent name="$PROJECT_DIR$/auth" />
       <recent name="$PROJECT_DIR$/bin" />
       <recent name="$PROJECT_DIR$/app" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/auth/tests/controllers" />
+      <recent name="$PROJECT_DIR$/auth/app/routes" />
+      <recent name="$PROJECT_DIR$/auth/app/controllers" />
+      <recent name="$PROJECT_DIR$/routes" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -388,17 +421,18 @@
       <workItem from="1568132168205" duration="3789000" />
       <workItem from="1568138134443" duration="5563000" />
       <workItem from="1568146855163" duration="7214000" />
-      <workItem from="1568322738125" duration="7848000" />
+      <workItem from="1568322738125" duration="7990000" />
+      <workItem from="1568390135832" duration="3981000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50894000" />
+    <option name="totallyTimeSpent" value="55017000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="962" y="0" width="1598" height="1080" extended-state="6" />
+    <frame x="0" y="0" width="2560" height="1080" extended-state="0" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49557522" weight="0.4026633" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49557522" visible="true" weight="0.4025207" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" sideWeight="0.50442475" side_tool="true" weight="0.24970461" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -409,9 +443,9 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info active="true" anchor="bottom" id="Docker" order="7" sideWeight="0.49904883" visible="true" weight="0.3831683" />
+      <window_info anchor="bottom" id="Docker" order="7" sideWeight="0.49901536" visible="true" weight="0.3831683" />
       <window_info anchor="bottom" id="Version Control" order="8" />
-      <window_info anchor="bottom" id="Terminal" order="9" sideWeight="0.5009512" side_tool="true" weight="0.3831683" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" sideWeight="0.50098467" side_tool="true" visible="true" weight="0.3831683" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50019693" side_tool="true" weight="0.37227723" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -442,7 +476,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/public/stylesheets/style.sass" />
     <entry file="file://$PROJECT_DIR$/views/layout.pug" />
     <entry file="file://$PROJECT_DIR$/views/error.pug" />
     <entry file="file://$PROJECT_DIR$/node_modules/ws/index.js" />
@@ -544,22 +577,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/auth/app/redis.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/auth/app/middlewares.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="26" column="18" selection-start-line="26" selection-start-column="18" selection-end-line="26" selection-end-column="18" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/auth/tests/test.js" />
     <entry file="file://$PROJECT_DIR$/auth/docker-compose.yml">
@@ -569,9 +588,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/auth/tests/controllers/userController.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/tests/controllers/userController.js" />
     <entry file="file://$PROJECT_DIR$/auth/node_modules/mongoose/lib/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="198">
@@ -593,13 +610,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/auth/app/controllers/userController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="38" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/auth/bin/server.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -607,52 +617,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/auth/tests/.mocharc.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/auth/tests/helpers.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" selection-start-line="1" selection-end-line="1" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/auth/app/routes/userRoutes.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="35" selection-start-line="7" selection-start-column="35" selection-end-line="7" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/auth/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="37" lean-forward="true" selection-start-line="5" selection-start-column="37" selection-end-line="5" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/auth/app/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="32" lean-forward="true" selection-start-line="5" selection-start-column="32" selection-end-line="5" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/tests/.mocharc.json" />
+    <entry file="file://$PROJECT_DIR$/auth/tests/helpers.js" />
     <entry file="file://$PROJECT_DIR$/auth/app/routes/authRoutes.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="270">
           <caret line="18" column="61" selection-start-line="18" selection-start-column="61" selection-end-line="18" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/auth/app/db.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="76" selection-start-line="6" selection-start-column="76" selection-end-line="6" selection-end-column="76" />
         </state>
       </provider>
     </entry>
@@ -670,17 +640,80 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/auth/app/models/userModel.js">
+    <entry file="file://$PROJECT_DIR$/auth/app/db.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="76" selection-start-line="6" selection-start-column="76" selection-end-line="6" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/node_modules/faker/lib/name.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="199">
-          <caret line="58" selection-start-line="58" selection-end-line="58" />
+          <caret line="61" column="2" selection-start-line="61" selection-start-column="2" selection-end-line="61" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="64" selection-start-line="6" selection-start-column="50" selection-end-line="6" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/app/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" selection-start-line="25" selection-end-line="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/app/redis.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="30" selection-start-line="2" selection-start-column="30" selection-end-line="2" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/app/middlewares.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="360">
+          <caret line="24" column="20" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/app/routes/userRoutes.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/auth/tests/controllers/authController.test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="188" column="52" selection-start-line="188" selection-start-column="52" selection-end-line="188" selection-end-column="52" />
+        <state relative-caret-position="304">
+          <caret line="143" column="58" selection-start-line="140" selection-start-column="11" selection-end-line="143" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/tests/controllers/userController.test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="56" column="53" lean-forward="true" selection-start-line="56" selection-start-column="53" selection-end-line="56" selection-end-column="53" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/app/models/userModel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-204">
+          <caret line="38" column="46" selection-start-line="38" selection-start-column="46" selection-end-line="38" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/auth/app/controllers/userController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="9" lean-forward="true" selection-start-line="21" selection-start-column="9" selection-end-line="21" selection-end-column="9" />
         </state>
       </provider>
     </entry>
