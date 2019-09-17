@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_13_205038) do
+ActiveRecord::Schema.define(version: 2019_09_16_232136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,33 @@ ActiveRecord::Schema.define(version: 2019_09_13_205038) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_bill_categories_on_user_id"
+  end
+
+  create_table "bill_events", force: :cascade do |t|
+    t.integer "kind"
+    t.text "message"
+    t.bigint "user_id"
+    t.bigint "bill_id"
+    t.jsonb "info"
+    t.jsonb "readed_by"
+    t.datetime "deleted_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bill_id"], name: "index_bill_events_on_bill_id"
+    t.index ["user_id"], name: "index_bill_events_on_user_id"
+  end
+
+  create_table "bill_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "bill_id"
+    t.float "amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.float "percent"
+    t.integer "status", default: 0
+    t.float "next_percent"
+    t.index ["bill_id"], name: "index_bill_users_on_bill_id"
+    t.index ["user_id"], name: "index_bill_users_on_user_id"
   end
 
   create_table "bills", force: :cascade do |t|
@@ -40,14 +67,48 @@ ActiveRecord::Schema.define(version: 2019_09_13_205038) do
     t.index ["user_id"], name: "index_bills_on_user_id"
   end
 
+  create_table "invoice_users", force: :cascade do |t|
+    t.float "amount"
+    t.datetime "expires_at"
+    t.integer "status"
+    t.bigint "user_id"
+    t.bigint "invoice_id"
+    t.bigint "bill_user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bill_user_id"], name: "index_invoice_users_on_bill_user_id"
+    t.index ["invoice_id"], name: "index_invoice_users_on_invoice_id"
+    t.index ["user_id"], name: "index_invoice_users_on_user_id"
+  end
+
+  create_table "invoices", force: :cascade do |t|
+    t.float "amount"
+    t.datetime "expires_at"
+    t.integer "number"
+    t.bigint "bill_id"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bill_id"], name: "index_invoices_on_bill_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "auth_id"
   end
 
   add_foreign_key "bill_categories", "users"
+  add_foreign_key "bill_events", "bills"
+  add_foreign_key "bill_events", "users"
+  add_foreign_key "bill_users", "bills"
+  add_foreign_key "bill_users", "users"
   add_foreign_key "bills", "bill_categories"
   add_foreign_key "bills", "users"
+  add_foreign_key "invoice_users", "bill_users"
+  add_foreign_key "invoice_users", "invoices"
+  add_foreign_key "invoice_users", "users"
+  add_foreign_key "invoices", "bills"
 end

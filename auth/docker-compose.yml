@@ -5,6 +5,8 @@ services:
     build: .
     ports:
       - "4000:4000"
+    expose:
+      - 4000
     links:
       - mongo
       - redis
@@ -13,6 +15,9 @@ services:
     environment:
       - REDIS_URL=redis://redis:6379
       - MONGO_URL=mongodb://mongo:27017
+    depends_on:
+      - mongo
+      - redis
   mongo:
     container_name: home_auth_mongo
     image: mongo
@@ -26,4 +31,3 @@ services:
     command: redis-server
     ports:
       - "6379:6379"
-
