@@ -15,6 +15,7 @@ services:
     environment:
       - REDIS_URL=redis://redis:6379
       - MONGO_URL=mongodb://mongo:27017
+      - KAFKA_URL=host.docker.internal:9092
     depends_on:
       - mongo
       - redis

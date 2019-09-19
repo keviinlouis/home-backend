@@ -1,5 +1,6 @@
 const UserModel = require('../models/userModel');
 const TokenService = require('../services/tokenService')
+const kafka = require('../kafka');
 
 exports.login = async (req, res) => {
     const {email, password} = req.body;
@@ -26,7 +27,15 @@ exports.signIn = async (req, res) => {
 
     const userSaved = await user.save();
 
-    res.status(201).json(userSaved.toResponse(true));
+    const userResponse = userSaved.toResponse(true);
+
+    const json = JSON.stringify(userResponse);
+
+    await kafka.producer.init();
+
+    await kafka.producer.send({message: {value: json}, topic: 'new-user'});
+
+    res.status(201).json(userResponse);
 };
 
 exports.validateToken = async (req, res) => {

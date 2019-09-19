@@ -1,7 +1,7 @@
 class BillController < ApplicationController
   def index
     bills = @user.bills.paginate(page: params[:page] || 1, per_page: params[:limit] || 20)
-    render json: bills
+    render json: User.all
   end
 
   def show
