@@ -33,7 +33,7 @@ exports.signIn = async (req, res) => {
 
     await kafka.producer.init();
 
-    await kafka.producer.send({message: {value: json}, topic: 'new-user'});
+    await kafka.producer.send({message: {value: json}, topic: 'user'});
 
     res.status(201).json(userResponse);
 };

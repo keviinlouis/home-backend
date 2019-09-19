@@ -13,7 +13,21 @@ services:
     environment:
       - RAILS_ENV=development
       - AUTH_URL=http://host.docker.internal:4000
-      - KAFKA_URL=host.docker.internal:9092
+      - KAFKA_URL=kafka://host.docker.internal:9092
+    links:
+      - postgres
+  home_financial_kafka:
+    container_name: home_financial_kafka
+    build: .
+    command: bundle exec karafka server
+    volumes:
+      - .:/financial
+    depends_on:
+      - postgres
+    environment:
+      - RAILS_ENV=development
+      - AUTH_URL=http://host.docker.internal:4000
+      - KAFKA_URL=kafka://host.docker.internal:9092
     links:
       - postgres
   postgres:

@@ -2,14 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2d3a60e9-ae35-4938-add9-12b6df913dc3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/auth/app/kafka.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth/app/controllers/authController.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/controllers/authController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/bin/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/bin/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/app/kafka.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/kafka.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/auth/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/auth/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/auth/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -39,9 +36,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
-        <option value="Ruby Class" />
         <option value="JavaScript File" />
         <option value="Ruby File" />
+        <option value="Ruby Class" />
       </list>
     </option>
   </component>
@@ -267,6 +264,23 @@
               <item name="com.intellij.execution.services.ServiceModel$ServiceNode@27182cc1" type="9fbbdea:ServiceModel$ServiceNode" />
               <item name="com.intellij.execution.services.ServiceModel$ServiceNode@4251fd2d" type="9fbbdea:ServiceModel$ServiceNode" />
             </path>
+            <path>
+              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@6323fc43" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@27182cc1" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@4a5348e9" type="9fbbdea:ServiceModel$ServiceNode" />
+            </path>
+            <path>
+              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@6323fc43" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@7308ded8" type="9fbbdea:ServiceModel$ServiceNode" />
+            </path>
+            <path>
+              <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@6323fc43" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@7308ded8" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@45fffcf0" type="9fbbdea:ServiceModel$ServiceNode" />
+            </path>
           </expand>
           <select />
         </treeState>
@@ -309,7 +323,7 @@
       <workItem from="1568661748622" duration="20418000" />
       <workItem from="1568829912784" duration="1152000" />
       <workItem from="1568834065300" duration="8662000" />
-      <workItem from="1568931282367" duration="1079000" />
+      <workItem from="1568931282367" duration="3474000" />
     </task>
     <servers />
   </component>

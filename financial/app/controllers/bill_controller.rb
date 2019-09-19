@@ -1,6 +1,7 @@
 class BillController < ApplicationController
   def index
     bills = @user.bills.paginate(page: params[:page] || 1, per_page: params[:limit] || 20)
+    WaterDrop::SyncProducer.call('testing', topic: 'auth')
     render json: User.all
   end
 
