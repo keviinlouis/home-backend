@@ -1,4 +1,12 @@
 const Kafka = require('no-kafka');
-const kafkaProducer = new Kafka.Producer({connectionString: process.env.KAFKA_URL});
+const producer = new Kafka.Producer({connectionString: process.env.KAFKA_URL, clientId: 'auth'});
 
-module.exports = {producer: kafkaProducer};
+const consumer = new Kafka.SimpleConsumer({clientId: 'auth'});
+
+consumer.init().then(() => {
+  consumer.subscribe('auth',0, function(messageSet, topic, partition){
+    console.log(messageSet[0].message.value)
+  })
+});
+
+module.exports = {producer: producer};
