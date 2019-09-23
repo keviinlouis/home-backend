@@ -4,7 +4,7 @@ class CreateInvoiceUsers < ActiveRecord::Migration[5.2]
       t.float :amount
       t.timestamp :expires_at
       t.integer :status
-      t.references :user, foreign_key: true
+      t.references :user, foreign_key: true, type: :string
       t.references :invoice, foreign_key: true
       t.references :bill_user, foreign_key: true
 

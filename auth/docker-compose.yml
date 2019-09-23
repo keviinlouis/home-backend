@@ -16,6 +16,7 @@ services:
       - REDIS_URL=redis://redis:6379
       - MONGO_URL=mongodb://mongo:27017
       - KAFKA_URL=kafka://host.docker.internal:9092
+      - FINANCIAL_URL=http://host.docker.internal:3000
     depends_on:
       - mongo
       - redis

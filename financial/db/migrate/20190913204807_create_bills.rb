@@ -7,7 +7,7 @@ class CreateBills < ActiveRecord::Migration[5.2]
       t.date :expires_at
       t.integer :frequency
       t.integer :frequency_type
-      t.references :user, foreign_key: true
+      t.references :user, foreign_key: true, type: :string
       t.references :bill_category, foreign_key: true
 
       t.timestamps

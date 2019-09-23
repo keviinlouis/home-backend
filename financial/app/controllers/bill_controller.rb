@@ -1,8 +1,7 @@
 class BillController < ApplicationController
   def index
     bills = @user.bills.paginate(page: params[:page] || 1, per_page: params[:limit] || 20)
-    WaterDrop::SyncProducer.call('testing', topic: 'auth')
-    render json: User.all
+    render json: bills
   end
 
   def show
@@ -48,7 +47,7 @@ class BillController < ApplicationController
   end
 
   def accept
-    bill_user = BillUser.where(user_id: 1, bill_id: params[:bill_id]).first
+    bill_user = BillUser.where(user_id: @user.id, bill_id: params[:bill_id]).first
 
     return render json: {}, status: :not_found unless bill_user.present?
 

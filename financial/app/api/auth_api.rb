@@ -13,4 +13,12 @@ class AuthApi
     raise exception if exception.http_code >= 500
     false
   end
+
+  def self.find_user_by_id(id)
+    url = "#{BASE_URL}/user/#{id}"
+
+    RestClient.get(url)
+  rescue RestClient::Exception => exception
+    raise exception if exception.http_code >= 500
+  end
 end

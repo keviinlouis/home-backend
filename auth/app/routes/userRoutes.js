@@ -3,10 +3,11 @@ const controller = require('../controllers/userController');
 const middlewares = require('../middlewares')
 const router = express.Router();
 
+router.get('/user/:id', controller.show);
+
 router.use(middlewares.auth);
 
 router.get('/user', controller.index);
-router.get('/user/:id', controller.show);
 
 router.use((err, req, res, next) => {
     if(err.name === "ValidationError"){

@@ -15,9 +15,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 //Routes
-const directoryPath = path.join(__dirname, 'routes');
+const routesPath = path.join(__dirname, 'routes');
 
-fs.readdir(directoryPath, function (err, files) {
+fs.readdir(routesPath, function (err, files) {
     if (err) {
         return console.log('Unable to scan directory: ' + err);
     }
@@ -25,6 +25,13 @@ fs.readdir(directoryPath, function (err, files) {
         const route = require('./routes/'+file);
         app.use(route);
     });
+});
+
+//Gateway
+const {routerGenerator, services} = require('./gateway');
+
+services.forEach(resource => {
+    app.use(`/${resource}`, routerGenerator(resource));
 });
 
 module.exports = app;

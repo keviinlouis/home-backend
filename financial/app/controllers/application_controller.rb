@@ -1,7 +1,15 @@
 class ApplicationController < ActionController::Base
-  before_action :validate_token
+  # before_action :validate_token
+  before_action :load_user
   protect_from_forgery with: :null_session
 
+  def load_user
+    @user = User.find_by_id user_id
+
+    @user = find_user_by_id if @user.blank?
+
+    render json: {error: 'user_not_founded'}, status: :unauthorized unless @user.present?
+  end
   def validate_token
     auth_response = AuthApi.authenticate(token)
 
@@ -13,7 +21,7 @@ class ApplicationController < ActionController::Base
 
     user = JSON.parse(auth_response.body)
 
-    @user = User.find_or_initialize_by(auth_id: user["id"])
+    @user = User.find_or_initialize_by(id: user["id"])
 
     @user.email = user["email"]
     @user.name = user["name"]
@@ -36,5 +44,25 @@ class ApplicationController < ActionController::Base
     pattern = /^Bearer /
     header  = request.headers['Authorization']
     header.gsub(pattern, '') if header && header.match(pattern)
+  end
+
+  def user_id
+    request.headers['Authorization']
+  end
+
+  def find_user_by_id
+    response = AuthApi.find_user_by_id(user_id)
+
+    return unless response.present?
+
+    user = JSON.parse(response.body)
+    @user = User.find_or_initialize_by(id: user["id"])
+
+    @user.email = user["email"]
+    @user.name = user["name"]
+
+    @user.save
+
+    @user
   end
 end
