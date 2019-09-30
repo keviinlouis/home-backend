@@ -10,6 +10,8 @@ Rails.application.routes.draw do
     resources :bill_event, only: [:index, :create, :delete], :path => '/events'
   end
 
+  post 'invoice/:id/pay', to: 'invoice_user#pay'
+
   resources :invoice
 
 end

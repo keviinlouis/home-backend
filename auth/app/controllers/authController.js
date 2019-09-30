@@ -8,13 +8,13 @@ exports.login = async (req, res) => {
     const user = await UserModel.findOne({email});
 
     if (!user) {
-        return res.status(404).json({error: 'NOT_FOUNDED'})
+        return res.status(404).json({errors: {email: ['Email não encontrado']}})
     }
 
     const isMatch = await user.comparePassword(password);
 
     if (!isMatch) {
-        return res.status(401).json({error: 'WRONG_PASSWORD'});
+        return res.status(401).json({errors: {password: ['Senha incorreta']}});
     }
 
     res.status(200).json(user.toResponse(true));

@@ -40,7 +40,7 @@ const routerGenerator = function(resource){
 
   router.use((err, req, res, next) => {
     if(err.isAxiosError){
-      return res.status(err.response.status).json(err.response.data)
+      return res.status(err.response.status).send(err.response.data)
     }
 
     next(err);

@@ -5,7 +5,7 @@ class InvoiceController < ApplicationController
 
     invoices = Invoice.joins(:invoice_users)
                  .where(status: :available)
-                  .where(invoice_users: { user_id: 1 })
+                  .where(invoice_users: { user_id: @user.id })
                  .paginate(page: page, per_page: limit)
 
     render json: invoices

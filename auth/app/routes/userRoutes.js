@@ -1,6 +1,6 @@
 const express = require('express');
 const controller = require('../controllers/userController');
-const middlewares = require('../middlewares')
+const middlewares = require('../middlewares');
 const router = express.Router();
 
 router.get('/user/:id', controller.show);
