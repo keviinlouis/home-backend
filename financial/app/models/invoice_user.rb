@@ -7,5 +7,6 @@ class InvoiceUser < ApplicationRecord
 
   def pay
     update status: :paid
+    invoice.check_if_everyone_paid
   end
 end

@@ -20,7 +20,7 @@ exports.login = async (req, res) => {
     res.status(200).json(user.toResponse(true));
 };
 
-exports.signIn = async (req, res) => {
+exports.signUp = async (req, res) => {
     const {email, name, password} = req.body;
 
     const user = new UserModel({email, name, password});

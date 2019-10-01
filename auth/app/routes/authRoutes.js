@@ -3,7 +3,7 @@ const controller = require('../controllers/authController');
 const router = express.Router();
 
 router.post('/login', controller.login);
-router.post('/sign-in', controller.signIn);
+router.post('/sign-up', controller.signUp);
 router.post('/validate-token', controller.validateToken);
 
 router.use((err, req, res, next) => {

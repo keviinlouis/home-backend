@@ -1,5 +1,5 @@
 class BillSerializer < ActiveModel::Serializer
-  attributes :id, :amount, :name, :description, :frequency, :frequency_type, :owner, :last_invoice
+  attributes :id, :status, :amount, :name, :description, :frequency, :frequency_type, :owner, :last_invoice
 
   belongs_to :bill_category
   has_many :bill_users
