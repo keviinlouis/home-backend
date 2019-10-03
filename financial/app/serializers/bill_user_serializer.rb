@@ -1,7 +1,15 @@
 class BillUserSerializer < ActiveModel::Serializer
-  attributes :id, :amount, :percent, :next_percent, :status, :user
+  attributes :id, :name, :email, :amount, :percent, :next_percent, :status, :last_invoice
 
-  def user
-    UserSerializer.new(object.user)
+  def id
+    object.user_id
+  end
+
+  def name
+    object.user.name
+  end
+
+  def email
+    object.user.email
   end
 end

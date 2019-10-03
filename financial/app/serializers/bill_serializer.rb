@@ -17,4 +17,9 @@ class BillSerializer < ActiveModel::Serializer
     }
   end
 
+  def status
+    last_invoice = object.last_invoice
+    return nil if last_invoice.nil?
+    last_invoice.status
+  end
 end

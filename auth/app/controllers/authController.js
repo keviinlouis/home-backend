@@ -62,3 +62,7 @@ exports.validateToken = async (req, res) => {
     return res.status(200).json(user.toResponse());
 };
 
+exports.me = async (req, res) => {
+    return res.status(200).json(req.user.toResponse());
+};
+

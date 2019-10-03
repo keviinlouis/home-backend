@@ -2,6 +2,7 @@ class BillUser < ApplicationRecord
   belongs_to :user
   belongs_to :bill
   has_many :invoice_users
+  has_one :last_invoice, -> { order(created_at: :desc) }, class_name: 'InvoiceUser'
 
   enum status: [:pending, :waiting, :active]
 
