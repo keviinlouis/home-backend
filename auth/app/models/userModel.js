@@ -4,6 +4,7 @@ const mongooseDelete = require('mongoose-delete');
 const bcrypt = require('bcrypt');
 const {validateEmail} = require('../validations');
 const TokenService = require('../services/tokenService');
+const elasticsearch = require('../elasticsearch');
 const SALT_WORK_FACTOR = 10;
 
 const schema = {
@@ -41,6 +42,18 @@ UserModelSchema.pre('save', async function (next) {
 
     if (user.isModified('password')) user.password = await bcrypt.hash(user.password, SALT_WORK_FACTOR);
 
+    next();
+});
+
+UserModelSchema.post('save', async function(user, next){
+    await elasticsearch.index({
+        index: 'users',
+        id: user._id,
+        body: {
+            name: user.name,
+            email: user.email
+        }
+    });
     next();
 });
 

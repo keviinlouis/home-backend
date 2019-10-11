@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2d3a60e9-ae35-4938-add9-12b6df913dc3" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/auth/app/elasticsearch.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/elastic-search/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/app/controllers/authController.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/controllers/authController.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth/app/routes/authRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/routes/authRoutes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/app/controllers/userController.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/controllers/userController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/app/models/userModel.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/models/userModel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/auth/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/auth/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/auth/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kafka/docker-compose.yml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -60,19 +66,19 @@
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/kafka" />
+      <recent name="$PROJECT_DIR$/auth/app" />
+      <recent name="$PROJECT_DIR$/auth/app/gateway" />
+      <recent name="$PROJECT_DIR$/financial/app/serializers" />
+      <recent name="$PROJECT_DIR$/financial/app/serializers/bill" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/auth/app/gateway" />
       <recent name="$PROJECT_DIR$/financial/app/serializers/bill" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/auth/tests/controllers" />
       <recent name="$PROJECT_DIR$/auth/app/routes" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/auth/app" />
-      <recent name="$PROJECT_DIR$/auth/app/gateway" />
-      <recent name="$PROJECT_DIR$/financial/app/serializers" />
-      <recent name="$PROJECT_DIR$/financial/app/serializers/bill" />
-      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -239,18 +245,18 @@
           <expand>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@5adb4da6" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@79f7276" type="9fbbdea:ServiceModel$ServiceNode" />
             </path>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@5adb4da6" type="9fbbdea:ServiceModel$ServiceNode" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@8741391" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@79f7276" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@639eb988" type="9fbbdea:ServiceModel$ServiceNode" />
             </path>
             <path>
               <item name="services root" type="e789fda9:ObjectUtils$Sentinel" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@5adb4da6" type="9fbbdea:ServiceModel$ServiceNode" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@8741391" type="9fbbdea:ServiceModel$ServiceNode" />
-              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@b65505" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@79f7276" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@639eb988" type="9fbbdea:ServiceModel$ServiceNode" />
+              <item name="com.intellij.execution.services.ServiceModel$ServiceNode@27977577" type="9fbbdea:ServiceModel$ServiceNode" />
             </path>
           </expand>
           <select />
@@ -302,6 +308,9 @@
       <workItem from="1569934817545" duration="1414000" />
       <workItem from="1569936706034" duration="4492000" />
       <workItem from="1570103862264" duration="4431000" />
+      <workItem from="1570371598541" duration="611000" />
+      <workItem from="1570551090645" duration="767000" />
+      <workItem from="1570808174727" duration="4882000" />
     </task>
     <servers />
   </component>
