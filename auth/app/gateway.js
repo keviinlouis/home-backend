@@ -14,7 +14,7 @@ const routerGenerator = function(resource){
 
   router.use((req, res, next) => {
     req.api = new ApiGateway(url, req.user.id);
-    req.service_path = req.url.replace('/financial');
+    req.service_path = req.url.replace(`/${resource}`);
     next();
   });
 

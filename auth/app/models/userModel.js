@@ -45,15 +45,15 @@ UserModelSchema.pre('save', async function (next) {
     next();
 });
 
-UserModelSchema.post('save', async function(user, next){
-    await elasticsearch.index({
+UserModelSchema.post('save', function(user, next){
+    elasticsearch.index({
         index: 'users',
         id: user._id,
         body: {
             name: user.name,
             email: user.email
         }
-    });
+    }).catch((e) => console.log(e));
     next();
 });
 

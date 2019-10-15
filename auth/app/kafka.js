@@ -4,8 +4,12 @@ const producer = new Kafka.Producer({connectionString: process.env.KAFKA_URL, cl
 const consumer = new Kafka.SimpleConsumer({clientId: 'auth'});
 
 consumer.init().then(() => {
-  consumer.subscribe('user',0, function(messageSet, topic, partition){
-    console.log(messageSet[0].message.value.toString())
+  consumer.subscribe('bill_event',0, function(messageSet, topic, partition){
+    const billEvent = JSON.parse(messageSet[0].message.value.toString())
+
+    if(billEvent.kind === 'message'){
+
+    }
   })
 });
 
