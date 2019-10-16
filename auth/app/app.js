@@ -61,17 +61,14 @@ consumer.init().then(() => {
     consumer.subscribe('bill_event',0, function(messageSet, topic, partition){
         const billEventAsJson = messageSet[0].message.value.toString();
         const billEvent = JSON.parse(billEventAsJson);
-
-        if(billEvent.kind === 'message'){
-            const socketPath = `bill_event.${billEvent.bill_id}.new`;
-            const usersIds = billEvent.notify_users;
-            usersIds.forEach((userId) => {
-                const targetSocket = connectedUsers[userId];
-                if(targetSocket){
-                    io.to(targetSocket).emit(socketPath, billEventAsJson)
-                }
-            });
-        }
+        const socketPath = `bill_event.${billEvent.bill_id}.new`;
+        const usersIds = billEvent.notify_users;
+        usersIds.forEach((userId) => {
+            const targetSocket = connectedUsers[userId];
+            if(targetSocket){
+                io.to(targetSocket).emit(socketPath, billEventAsJson)
+            }
+        });
     })
 });
 
