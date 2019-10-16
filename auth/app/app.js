@@ -18,6 +18,9 @@ io.on('connection', socket => {
     const { user } = socket.handshake.query;
     console.log(user, socket.id);
     connectedUsers[user] = socket.id;
+    socket.on('disconnect', function () {
+        delete connectedUsers[user]
+    });
 });
 
 app.use((request, response, next) => {
@@ -60,15 +63,17 @@ consumer.init().then(() => {
         const billEvent = JSON.parse(billEventAsJson);
 
         if(billEvent.kind === 'message'){
+            const socketPath = `bill_event.${billEvent.bill_id}.new`;
             const usersIds = billEvent.notify_users;
             usersIds.forEach((userId) => {
-                const targetSocket = request.connectedUsers[userId];
-                if(targetSocket)
-                    io.to(targetSocket).emit(`bill_event.${billEvent.bill_id}.new`, billEventAsJson)
+                const targetSocket = connectedUsers[userId];
+                if(targetSocket){
+                    io.to(targetSocket).emit(socketPath, billEventAsJson)
+                }
             });
         }
     })
 });
 
-module.exports = app;
+module.exports = server;
 
