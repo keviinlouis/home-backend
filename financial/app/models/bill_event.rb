@@ -4,10 +4,12 @@ class BillEvent < ApplicationRecord
 
   enum kind: [:message, :event]
 
-  before_create :send_to_kafka
+  after_create :send_to_kafka
 
   def send_to_kafka
     serializer = BillEventSerializer.new(self)
-    WaterDrop::AsyncProducer.call(serializer.to_json, topic: 'bill_event')
+    data = serializer.to_h
+    data[:notify_users] = bill.bill_users.where.not(user_id: user_id).pluck(:user_id)
+    WaterDrop::AsyncProducer.call(data.to_json, topic: 'bill_event')
   end
 end

@@ -9,6 +9,23 @@ require('dotenv-safe').config();
 require('./db');
 
 const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+
+const connectedUsers = {};
+
+io.on('connection', socket => {
+    const { user } = socket.handshake.query;
+    console.log(user, socket.id);
+    connectedUsers[user] = socket.id;
+});
+
+app.use((request, response, next) => {
+    request.io = io;
+    request.connectedUsers = connectedUsers;
+
+    return next();
+});
 
 app.use(helmet());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -32,6 +49,25 @@ const {routerGenerator, services} = require('./gateway');
 
 services.forEach(resource => {
     app.use(`/${resource}`, routerGenerator(resource));
+});
+
+//Consumer
+const {consumer} = require('./kafka.js');
+
+consumer.init().then(() => {
+    consumer.subscribe('bill_event',0, function(messageSet, topic, partition){
+        const billEventAsJson = messageSet[0].message.value.toString();
+        const billEvent = JSON.parse(billEventAsJson);
+
+        if(billEvent.kind === 'message'){
+            const usersIds = billEvent.notify_users;
+            usersIds.forEach((userId) => {
+                const targetSocket = request.connectedUsers[userId];
+                if(targetSocket)
+                    io.to(targetSocket).emit(`bill_event.${billEvent.bill_id}.new`, billEventAsJson)
+            });
+        }
+    })
 });
 
 module.exports = app;
