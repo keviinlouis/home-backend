@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2d3a60e9-ae35-4938-add9-12b6df913dc3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth/app/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth/app/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/kafka/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/kafka/docker-compose.yml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -343,7 +341,7 @@
       <workItem from="1571157280196" duration="2716000" />
       <workItem from="1571162172507" duration="3000" />
       <workItem from="1571226863633" duration="5805000" />
-      <workItem from="1571314868165" duration="4552000" />
+      <workItem from="1571314868165" duration="4589000" />
     </task>
     <servers />
   </component>

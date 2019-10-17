@@ -54,7 +54,6 @@ const {consumer} = require('./kafka.js');
 consumer.init().then(() => {
     consumer.subscribe('bill_event',0, function(messageSet, topic, partition){
         const billEventAsJson = messageSet[0].message.value.toString();
-        console.log(billEventAsJson);
         const billEvent = JSON.parse(billEventAsJson);
         const socketPath = `bill_event.${billEvent.bill_id}.new`;
         const usersIds = billEvent.notify_users;
