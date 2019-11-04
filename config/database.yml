@@ -14,15 +14,16 @@ default: &default
 
 development:
   <<: *default
-  database: home_financial_development
+  database: home_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *default
-  database: home_financial_test
+  database: home_test
 
 production:
   <<: *default
-  database: home_financial_production
+  database: home_production
+  host: <%= ENV.fetch("DATABASE_URL") %>
