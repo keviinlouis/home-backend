@@ -1,11 +1,11 @@
 class BillSerializer < ActiveModel::Serializer
-  attributes :id, :status, :amount, :name, :description, :frequency, :frequency_type, :owner, :last_invoice
+  attributes :id, :status, :amount, :name, :description, :frequency, :frequency_type, :owner, :last_invoice, :expires_at
 
   belongs_to :bill_category
   has_many :bill_users
 
   def owner
-    UserSerializer.new(object.user)
+    UserSerializer.new(User.find object.user_id)
   end
 
   def last_invoice
