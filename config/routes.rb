@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   #
+
+  post '/login', to: 'user#login'
+  get '/me', to: 'user#me'
+  resources :user
+
   resources :bill do
     resources :bill_user, only: :create, :path => '/bill-user'
 

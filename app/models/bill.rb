@@ -103,7 +103,7 @@ class Bill < ApplicationRecord
     end
 
     last_invoice = self.last_invoice
-    last_invoice.update_invoice_users if last_invoice&.available?
+    last_invoice.update_invoice_users if last_invoice && last_invoice.available?
   end
 
   def pending_users?

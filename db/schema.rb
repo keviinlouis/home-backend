@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_16_232136) do
+ActiveRecord::Schema.define(version: 2019_11_01_141321) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "bill_categories", force: :cascade do |t|
     t.string "name"
-    t.string "user_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_bill_categories_on_user_id"
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2019_09_16_232136) do
   create_table "bill_events", force: :cascade do |t|
     t.integer "kind"
     t.text "message"
-    t.string "user_id"
+    t.bigint "user_id"
     t.bigint "bill_id"
     t.jsonb "info"
     t.jsonb "readed_by"
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2019_09_16_232136) do
   end
 
   create_table "bill_users", force: :cascade do |t|
-    t.string "user_id"
+    t.bigint "user_id"
     t.bigint "bill_id"
     t.float "amount"
     t.datetime "created_at", null: false
@@ -57,7 +57,7 @@ ActiveRecord::Schema.define(version: 2019_09_16_232136) do
     t.date "expires_at"
     t.integer "frequency"
     t.integer "frequency_type"
-    t.string "user_id"
+    t.bigint "user_id"
     t.bigint "bill_category_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -71,7 +71,7 @@ ActiveRecord::Schema.define(version: 2019_09_16_232136) do
     t.float "amount"
     t.datetime "expires_at"
     t.integer "status"
-    t.string "user_id"
+    t.bigint "user_id"
     t.bigint "invoice_id"
     t.bigint "bill_user_id"
     t.datetime "created_at", null: false
@@ -92,13 +92,14 @@ ActiveRecord::Schema.define(version: 2019_09_16_232136) do
     t.index ["bill_id"], name: "index_invoices_on_bill_id"
   end
 
-  create_table "users", id: false, force: :cascade do |t|
-    t.string "id", null: false
+  create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["id"], name: "index_users_on_id", unique: true
+    t.datetime "deleted_at"
+    t.string "password_digest"
+    t.index ["deleted_at"], name: "index_users_on_deleted_at"
   end
 
   add_foreign_key "bill_categories", "users"

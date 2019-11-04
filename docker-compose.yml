@@ -1,15 +1,18 @@
 version: '3'
 services:
   home:
-    container_name: home_app
+    container_name: app
     build: .
-    command: bash -c "rm -f ./tmp/pids/server.pid && rails s -p 3000 -b '0.0.0.0'"
+#    command: bash -c "rm -f ./tmp/pids/server.pid && rails s -p 3000 -b '0.0.0.0'"
+    command: bash -c "while [ true ]; do sleep 10; done"
     volumes:
-      - .:/financial
+      - .:/app
     ports:
       - "3000:3000"
     depends_on:
       - postgres
+      - elasticsearch
+      - redis
     environment:
       - RAILS_ENV=development
       - AUTH_URL=http://host.docker.internal:4000

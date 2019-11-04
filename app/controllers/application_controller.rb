@@ -1,22 +1,8 @@
 class ApplicationController < ActionController::API
-  # before_action :validate_token
   before_action :load_user
 
   def not_found
     render json: { error: 'not_found' }
-  end
-
-  def authorize_request
-    header = request.headers['Authorization']
-    header = header.split(' ').last if header
-    begin
-      @decoded = JsonWebToken.decode(header)
-      @current_user = User.find(@decoded[:user_id])
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { errors: e.message }, status: :unauthorized
-    rescue JWT::DecodeError => e
-      render json: { errors: e.message }, status: :unauthorized
-    end
   end
 
   def load_user
@@ -24,12 +10,14 @@ class ApplicationController < ActionController::API
     header = header.split(' ').last if header
 
     begin
-      @decoded = JsonWebToken.decode(header)
-      @user = User.find_by_id user_id
+      decoded = JsonWebToken.decode(header)
+      @user = User.find_by_id decoded[:id]
     rescue ActiveRecord::RecordNotFound => e
       render json: { errors: e.message }, status: :unauthorized
+    rescue JWT::ExpiredSignature => e
+      render json: { errors: e }, status: :unauthorized
     rescue JWT::DecodeError => e
-      render json: { errors: e.message }, status: :unauthorized
+      render json: { errors: e }, status: :unauthorized
     end
   end
 
@@ -40,5 +28,13 @@ class ApplicationController < ActionController::API
 
   rescue
     render json: {}, status: :not_found
+  end
+
+  def json_with_errors(errors)
+    render json: { errors: errors }, status: :unprocessable_entity
+  end
+
+  def current_user
+    @user
   end
 end

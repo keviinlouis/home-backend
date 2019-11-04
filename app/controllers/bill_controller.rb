@@ -53,7 +53,7 @@ class BillController < ApplicationController
 
     return render json: {} if bill_user.active?
 
-    bill_user.update status: :waiting
+    bill_user.update status: :active
 
     bill = bill_user.bill
 
