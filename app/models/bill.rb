@@ -17,7 +17,7 @@ class Bill < ApplicationRecord
 
   after_create :add_owner_user_to_bill
   after_create :create_invoice
-  after_update :update_amount_on_bill_users, if: :amount_changed?
+  after_update :update_amount_on_bill_users
   after_update :update_or_create_invoice
   before_destroy :cancel_next_invoice
 
