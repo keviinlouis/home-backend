@@ -168,7 +168,11 @@ class Bill < ApplicationRecord
   end
 
   def update_amount_on_bill_users
-    bill_users.each(&:update_amount_by_percent)
+    bill_users.each do |bill_user|
+      bill_user.update_amount_by_percent
+      bill_user.save
+    end
+    last_invoice.update_invoice_users
   end
 
 end
