@@ -122,3 +122,7 @@ U
 %app/assets/javascripts/application.js,4/3/431311cbb9902e2a56811443372061424f388e2c
 C
 config/database.yml,2/c/2c912561029efc03ffae15b01b7337417d7a99bd
+R
+"app/serializers/bill_serializer.rb,f/d/fde633b55982944f8688969db4863a613f0db17e
+<
+db/schema.rb,2/c/2cda0c6171fa7d04989507a1dd112e34c40df46d

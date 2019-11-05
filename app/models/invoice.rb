@@ -13,8 +13,6 @@ class Invoice < ApplicationRecord
   end
 
   def update_invoice_users
-    attributes[:status] = :canceled if self.canceled?
-
     bill.bill_users.where('percent is not null').each do |bill_user|
       invoice_user = invoice_users.where(user_id: bill_user.user_id).first
 

@@ -17,6 +17,7 @@ class Bill < ApplicationRecord
 
   after_create :add_owner_user_to_bill
   after_create :create_invoice
+  after_update :update_amount_on_bill_users, if: :amount_changed?
   after_update :update_or_create_invoice
   before_destroy :cancel_next_invoice
 
@@ -147,8 +148,6 @@ class Bill < ApplicationRecord
 
     bill_user = bill_users.where(user_id: user["id"]).first || BillUser.new(bill_id: self.id, user_id: user["id"])
 
-    puts bill_user.percent
-
     bill_user.next_percent = user["percent"]
 
     bill_user.status = bill_user.user_id == self.user_id ? :waiting : :pending
@@ -166,6 +165,10 @@ class Bill < ApplicationRecord
     removed_ids = actual_users_ids.reject { |user_id| new_ids.include? user_id }
 
     bill_users.where(user_id: removed_ids).destroy_all if removed_ids.any?
+  end
+
+  def update_amount_on_bill_users
+    bill_users.each(&:update_amount_by_percent)
   end
 
 end
