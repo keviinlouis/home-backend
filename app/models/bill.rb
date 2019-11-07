@@ -63,7 +63,7 @@ class Bill < ApplicationRecord
 
     return if last_invoice.nil? || last_invoice.paid?
 
-    last_invoice.update status: :cancel
+    last_invoice.update status: :canceled
   end
 
   def last_invoice
