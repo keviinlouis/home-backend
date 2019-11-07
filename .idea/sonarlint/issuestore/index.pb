@@ -126,3 +126,7 @@ R
 "app/serializers/bill_serializer.rb,f/d/fde633b55982944f8688969db4863a613f0db17e
 <
 db/schema.rb,2/c/2cda0c6171fa7d04989507a1dd112e34c40df46d
+E
+app/models/invoice.rb,d/2/d29dae1db55f19bf50aaf6b8e4aa423fcf3dd37f
+J
+app/models/invoice_user.rb,f/a/faaf8585c2832b201d0570331014d946f0a824a1
