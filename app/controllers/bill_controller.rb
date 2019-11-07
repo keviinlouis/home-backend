@@ -34,7 +34,7 @@ class BillController < ApplicationController
     render json: {}, status: :not_found
   end
 
-  def delete
+  def destroy
     bill = @user.bills.find(params[:id])
 
     bill.destroy
