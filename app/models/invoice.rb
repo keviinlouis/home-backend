@@ -1,6 +1,6 @@
 class Invoice < ApplicationRecord
   belongs_to :bill, -> { with_deleted }
-  has_many :invoice_users
+  has_many :invoice_users, dependent: :destroy
 
   after_update :update_invoice_users, if: :available?
 
