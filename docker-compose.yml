@@ -17,6 +17,7 @@ services:
       - RAILS_ENV=development
       - AUTH_URL=http://host.docker.internal:4000
       - KAFKA_URL=kafka://host.docker.internal:9092
+      - DATABASE_URL=postgres
     links:
       - postgres
 
