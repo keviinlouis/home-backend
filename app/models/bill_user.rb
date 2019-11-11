@@ -4,7 +4,7 @@ class BillUser < ApplicationRecord
   has_many :invoice_users
   has_one :last_invoice, -> { order(created_at: :desc) }, class_name: 'InvoiceUser'
 
-  enum status: [:pending, :waiting, :active]
+  enum status: [:pending, :waiting_others, :active]
 
   validates :percent, presence: true, unless: :next_percent?
 

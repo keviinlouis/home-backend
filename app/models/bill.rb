@@ -150,7 +150,7 @@ class Bill < ApplicationRecord
 
     bill_user.next_percent = user["percent"]
 
-    bill_user.status = bill_user.user_id == self.user_id ? :waiting : :pending
+    bill_user.status = bill_user.user_id == self.user_id ? :waiting_others : :pending
 
     bill_user.save
 
