@@ -28,7 +28,7 @@ class UserController < ApplicationController
     # Improve with elastic search
     if query
       users = users.where("name like ? or email like ?", query, query)
-    eif
+    end
 
     render json: users
   end
