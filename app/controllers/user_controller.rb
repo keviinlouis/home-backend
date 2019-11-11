@@ -20,11 +20,11 @@ class UserController < ApplicationController
   end
 
   def index
-    query = params[:query] || ''
+    query = "%#{params[:query] || ''}%"
 
     # Improve with elastic search
     if query
-      users = User.where("name like '%?%' or email like '%?%'", query, query)
+      users = User.where("name like ? or email like ?", query, query)
     else
       users = User.all
     end
