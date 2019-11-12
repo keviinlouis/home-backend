@@ -9,6 +9,8 @@ class User < ApplicationRecord
   has_many :invoices, through: :invoice_users
   has_many :notification
 
+  has_many :device
+
   validates :email, uniqueness: true, presence: true
   validates :name, presence: true
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_12_220256) do
+ActiveRecord::Schema.define(version: 2019_11_12_231130) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,6 +65,15 @@ ActiveRecord::Schema.define(version: 2019_11_12_220256) do
     t.index ["bill_category_id"], name: "index_bills_on_bill_category_id"
     t.index ["deleted_at"], name: "index_bills_on_deleted_at"
     t.index ["user_id"], name: "index_bills_on_user_id"
+  end
+
+  create_table "devices", force: :cascade do |t|
+    t.bigint "user_id"
+    t.text "fcm_token"
+    t.integer "deivce_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_devices_on_user_id"
   end
 
   create_table "invoice_users", force: :cascade do |t|
@@ -127,6 +136,7 @@ ActiveRecord::Schema.define(version: 2019_11_12_220256) do
   add_foreign_key "bill_users", "users"
   add_foreign_key "bills", "bill_categories"
   add_foreign_key "bills", "users"
+  add_foreign_key "devices", "users"
   add_foreign_key "invoice_users", "bill_users"
   add_foreign_key "invoice_users", "invoices"
   add_foreign_key "invoice_users", "users"

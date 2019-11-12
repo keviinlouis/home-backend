@@ -8,11 +8,17 @@ class UserController < ApplicationController
       return json_with_errors email: ['Email não encontrado']
     end
 
-    unless user.authenticate params[:password]
+    unless user.authenticate(params[:password])
       return json_with_errors password: ['Senha incorreta']
     end
 
-    render json: user, generate_token: true
+    device_id = params[:device_id]
+
+    unless device_id.present?
+      device_id = user.device.create.id
+    end
+
+    render json: user, authenticating: true, device_id: device_id
   end
 
   def me
@@ -40,8 +46,9 @@ class UserController < ApplicationController
       return json_with_errors user.errors
     end
 
+    device_id = user.device.create.id
 
-    render json: user, status: :created, generate_token: true
+    render json: user, status: :created, authenticating: true, device_id: device_id
   end
 
   def update
