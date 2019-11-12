@@ -20,13 +20,14 @@ class UserController < ApplicationController
   end
 
   def index
-    query = params[:query] || ''
+    query = "%#{params[:query] || ''}%"
+    exclude = params[:exclude] || []
+
+    users = User.where.not(id: exclude)
 
     # Improve with elastic search
     if query
-      users = User.where("name like '%?%' or email like '%?%'", query, query)
-    else
-      users = User.all
+      users = users.where("name like ? or email like ?", query, query)
     end
 
     render json: users
