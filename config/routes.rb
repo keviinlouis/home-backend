@@ -6,6 +6,8 @@ Rails.application.routes.draw do
   get '/me', to: 'user#me'
   resources :user
 
+  resources :notification, only: [:index, :update]
+
   resources :bill do
     resources :bill_user, only: :create, :path => '/bill-user'
 

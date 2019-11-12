@@ -5,10 +5,14 @@ class Notification < ApplicationRecord
   after_create :schedule_notification
 
   enum notification_types: [:bill_added]
-  enum status: [:created, :sent, :error]
+  enum status: [:created, :sent, :readed, :error]
 
   def schedule_notification
 
+  end
+  
+  def read!
+    update status: :readed, opened: true, opened_at: DateTime.now
   end
 
   def self.notify_bill_added(user, bill)
