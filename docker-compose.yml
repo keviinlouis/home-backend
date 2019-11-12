@@ -8,7 +8,9 @@ services:
     volumes:
       - .:/app
     ports:
-      - "3000:3000"
+      - "3002:3000"
+    expose:
+      - 3001
     depends_on:
       - postgres
       - elasticsearch
@@ -20,6 +22,8 @@ services:
       - DATABASE_URL=postgres
     links:
       - postgres
+      - elasticsearch
+      - redis
 
   postgres:
     container_name: home_db
@@ -33,15 +37,8 @@ services:
   elasticsearch:
     container_name: home_elasticsearch
     image: elasticsearch:7.4.0
-    ports:
-      - "9200:9200"
-      - "9300:9300"
-    expose:
-      - "9200"
 
   redis:
     container_name: home_redis
     image: redis
     command: redis-server
-    ports:
-      - "6379:6379"

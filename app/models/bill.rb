@@ -95,7 +95,10 @@ class Bill < ApplicationRecord
       update_or_create_invoice
 
       raise ActiveRecord::Rollback if errors.any?
+
     end
+
+    new_users.each { |bill_user| Notification.notify_bill_added(bill_user.user, self) }
   end
 
   def active_all_users
@@ -108,7 +111,15 @@ class Bill < ApplicationRecord
   end
 
   def pending_users?
-    bill_users.where(status: :pending).exists?
+    pending_users.exists?
+  end
+
+  def pending_users
+    bill_users.where(status: :pending)
+  end
+
+  def new_users
+    bill_users.where(percent: nil)
   end
 
   def remove_next_state_users

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_01_141321) do
+ActiveRecord::Schema.define(version: 2019_11_12_220256) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,24 @@ ActiveRecord::Schema.define(version: 2019_11_01_141321) do
     t.index ["bill_id"], name: "index_invoices_on_bill_id"
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.bigint "user_id"
+    t.string "resource_type"
+    t.bigint "resource_id"
+    t.boolean "opened"
+    t.datetime "opened_at"
+    t.integer "notification_type"
+    t.string "message_error"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["opened"], name: "index_notifications_on_opened"
+    t.index ["resource_type", "resource_id"], name: "index_notifications_on_resource_type_and_resource_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -113,4 +131,5 @@ ActiveRecord::Schema.define(version: 2019_11_01_141321) do
   add_foreign_key "invoice_users", "invoices"
   add_foreign_key "invoice_users", "users"
   add_foreign_key "invoices", "bills"
+  add_foreign_key "notifications", "users"
 end
