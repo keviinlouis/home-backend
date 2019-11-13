@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :notification
 
   has_many :device
+  has_many :device_with_token, -> { where.not(fcm_token: nil) }
 
   validates :email, uniqueness: true, presence: true
   validates :name, presence: true

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   post '/login', to: 'user#login'
   get '/me', to: 'user#me'
+  put '/me/device', to: 'user#device'
   resources :user
 
   resources :notification, only: [:index, :update]

@@ -8,9 +8,19 @@ class Notification < ApplicationRecord
   enum status: [:created, :sent, :readed, :error]
 
   def schedule_notification
-
+    n = Rpush::Gcm::Notification.new
+    n.app = Rpush::Gcm::App.find_by_name("fcm_app")
+    n.registration_ids = user.device.where.not(fcm_token: nil).pluck(:fcm_token)
+    n.data = { resource: { id: resource.id, type: resource_type }, click_action: "FLUTTER_NOTIFICATION_CLICK" }
+    n.priority = 'high'
+    n.content_available = true
+    n.notification = {
+      body: description,
+      title: title
+    }
+    n.save!
   end
-  
+
   def read!
     update status: :readed, opened: true, opened_at: DateTime.now
   end

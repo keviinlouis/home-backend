@@ -20,6 +20,7 @@ services:
       - AUTH_URL=http://host.docker.internal:4000
       - KAFKA_URL=kafka://host.docker.internal:9092
       - DATABASE_URL=postgres
+      - FCM_AUTH_KEY=AAAAimsF8i4:APA91bEVoYjiN4vcJfNLi8tg5iF2_CEbiri1q-EmoeoyhkHKVFLZ7TXVUFd5XkNBu6np0eK78cX8WjOEXB-DJYxOpjdA98J4RqLK76oJXFLTnggrQaMbQZRQMGacB1MAGNeLUrp1cMu0
     links:
       - postgres
       - elasticsearch

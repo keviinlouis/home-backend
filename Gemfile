@@ -40,6 +40,8 @@ gem 'will_paginate', '~> 3.1.0'
 
 gem 'enum_attributes_validation'
 
+gem 'rpush'
+
 group :development, :test do
   gem "pry"
   gem 'pry-nav'
