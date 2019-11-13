@@ -9,6 +9,7 @@ class Notification < ApplicationRecord
 
   def schedule_notification
     fcm_api.send_to device_tokens, notification_payload, resource_payload
+    update status: :sent
   end
 
   def read!
