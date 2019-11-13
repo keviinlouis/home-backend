@@ -8,17 +8,7 @@ class Notification < ApplicationRecord
   enum status: [:created, :sent, :readed, :error]
 
   def schedule_notification
-    n = Rpush::Gcm::Notification.new
-    n.app = Rpush::Gcm::App.find_by_name("fcm_app")
-    n.registration_ids = user.device.where('fcm_token is not null').pluck(:fcm_token)
-    n.data = { resource: { id: resource.id, type: resource_type }, click_action: "FLUTTER_NOTIFICATION_CLICK" }
-    n.priority = 'high'
-    n.content_available = true
-    n.notification = {
-      body: description,
-      title: title
-    }
-    puts n.save!
+    fcm_api.send_to device_tokens, notification_payload, resource_payload
   end
 
   def read!
@@ -33,5 +23,23 @@ class Notification < ApplicationRecord
       resource: bill,
       notification_type: :bill_added
     )
+  end
+
+  private
+
+  def device_tokens
+    user.device.where('fcm_token is not null').pluck(:fcm_token)
+  end
+
+  def notification_payload
+    { body: description, title: title }
+  end
+
+  def resource_payload
+    { id: resource.id, type: resource_type }
+  end
+
+  def fcm_api
+    FCM.new ENV.fetch('FCM_AUTH_KEY')
   end
 end
