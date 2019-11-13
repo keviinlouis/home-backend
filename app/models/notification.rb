@@ -10,7 +10,7 @@ class Notification < ApplicationRecord
   def schedule_notification
     n = Rpush::Gcm::Notification.new
     n.app = Rpush::Gcm::App.find_by_name("fcm_app")
-    n.registration_ids = user.device.where.not(fcm_token: nil).pluck(:fcm_token)
+    n.registration_ids = user.device.where('fcm_token is not null').pluck(:fcm_token)
     n.data = { resource: { id: resource.id, type: resource_type }, click_action: "FLUTTER_NOTIFICATION_CLICK" }
     n.priority = 'high'
     n.content_available = true
@@ -18,7 +18,7 @@ class Notification < ApplicationRecord
       body: description,
       title: title
     }
-    n.save!
+    puts n.save!
   end
 
   def read!
