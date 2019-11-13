@@ -36,7 +36,7 @@ class FCM
 
     return response if options[:no_parse]
 
-    JSON.parse response.data
+    JSON.parse response
   end
 
   def headers(options = {})
