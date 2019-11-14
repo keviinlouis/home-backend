@@ -37,7 +37,7 @@ class Notification < ApplicationRecord
   end
 
   def resource_payload
-    { id: resource.id, type: resource_type }
+    { id: resource.id, type: resource_type, click_action: "FLUTTER_NOTIFICATION_CLICK" }
   end
 
   def fcm_api
