@@ -9,8 +9,6 @@ class FCM
   end
 
   def send_to(fcm_token, notification, data = {}, options = {})
-    data.merge(click_action: "FLUTTER_NOTIFICATION_CLICK")
-
     if fcm_token.class == String
       fcm_token = [fcm_token]
     end
