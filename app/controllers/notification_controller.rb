@@ -3,7 +3,7 @@ class NotificationController < ApplicationController
 
   def index
     page = params[:page] || 1
-    render json: current_user.notification.paginate(page)
+    render json: current_user.notification.page(page)
   end
 
   def update
