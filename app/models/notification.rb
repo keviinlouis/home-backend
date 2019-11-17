@@ -18,7 +18,7 @@ class Notification < ApplicationRecord
 
   def self.notify_bill_added(user, bill)
     create(
-      title: "Você foi adicionado em uma nova conta",
+      title: "#{bill.user.name.split(' ').first} te adionou em uma nova conta",
       description: '',
       user: user,
       resource: bill,
