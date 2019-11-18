@@ -4,7 +4,7 @@ class Notification < ApplicationRecord
 
   after_save :schedule_notification, if: :sendable
 
-  enum notification_types: [:bill_added, :bill_updated]
+  enum notification_types: [:bill_added, :bill_updated, :bill_refused, :bill_accepted]
   enum status: [:created, :sent, :readed, :error]
 
   def schedule_notification
@@ -40,6 +40,30 @@ class Notification < ApplicationRecord
     notify user, bill, data
   end
 
+  def self.notify_user_accept_bill(bill, user)
+    first_name = user.name.split(' ').first
+
+    data = {
+      title: "#{first_name} aceitou a conta de #{bill.name}",
+      description: '',
+      notification_type: :bill_accepted,
+    }
+
+    notify bill.user, bill, data
+  end
+
+  def self.notify_user_refused_bill(bill, user)
+    first_name = user.name.split(' ').first
+
+    data = {
+      title: "#{first_name} recusou a conta de #{bill.name}",
+      description: '',
+      notification_type: :bill_refused,
+    }
+
+    notify bill.user, bill, data
+  end
+
   def self.notify(user, resource, data)
     notification = self.where(resource_id: resource.id, resource_type: resource.class.to_s, user_id: user.id, opened: false).first
 
@@ -59,6 +83,7 @@ class Notification < ApplicationRecord
   def sendable
     !opened? && !readed? && created?
   end
+
 
 
   private

@@ -57,6 +57,8 @@ class BillController < ApplicationController
 
     bill = bill_user.bill
 
+    Notification.notify_user_accept_bill(bill, bill_user.user)
+
     bill.add_event :user_accepted, @user
 
     bill.active_all_users unless bill.pending_users?
@@ -70,6 +72,8 @@ class BillController < ApplicationController
     return render json: {}, status: :not_found unless bill_user.present?
 
     bill = bill_user.bill
+
+    Notification.notify_user_refused_bill(bill, bill_user.user)
 
     bill.add_event :user_refused, @user
 
