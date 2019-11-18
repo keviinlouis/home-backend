@@ -35,6 +35,14 @@ class UserController < ApplicationController
     render json: device
   end
 
+  def remove_device
+    device = Device.where(id: params[:device_id], user: current_user).first
+
+    device.delete if device
+
+    render json: {}
+  end
+
   def index
     query = "%#{params[:query] || ''}%"
     exclude = params[:exclude] || []

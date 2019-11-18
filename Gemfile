@@ -40,6 +40,9 @@ gem 'will_paginate', '~> 3.1.0'
 
 gem 'enum_attributes_validation'
 
+gem 'rails-i18n'
+
+
 group :development, :test do
   gem "pry"
   gem 'pry-nav'

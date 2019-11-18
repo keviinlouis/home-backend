@@ -97,8 +97,6 @@ class Bill < ApplicationRecord
       raise ActiveRecord::Rollback if errors.any?
 
     end
-
-    new_users.each { |bill_user| Notification.notify_bill_added(bill_user.user, self) }
   end
 
   def active_all_users
@@ -119,7 +117,11 @@ class Bill < ApplicationRecord
   end
 
   def new_users
-    bill_users.where(percent: nil)
+    bill_users.where('percent is null')
+  end
+
+  def old_users
+    bill_users.where('percent is not null')
   end
 
   def remove_next_state_users

@@ -6,6 +6,10 @@ class BillUserController < ApplicationController
 
     bill.update_users params[:users]
 
+    bill.new_users.where.not(user_id: current_user.id).each { |bill_user| Notification.notify_bill_added(bill_user.user, bill) }
+
+    bill.old_users.where.not(user_id: current_user.id).each { |bill_user| Notification.notify_bill_edited(bill_user.user, bill) }
+
     return render json: bill.errors, status: :unprocessable_entity if bill.errors.any?
 
     bill.add_event :update_users, @user

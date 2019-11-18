@@ -1,5 +1,5 @@
 class NotificationController < ApplicationController
-  before_action :load_notification, only: [:read]
+  before_action :load_notification, only: [:update]
 
   def index
     page = params[:page] || 1

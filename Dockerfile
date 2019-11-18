@@ -3,6 +3,7 @@ FROM ruby:2.6.4
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 
 ENV APP_HOME /app
+ENV ENTRYPOINT $APP_HOME/entrypoint.sh
 RUN mkdir -p $APP_HOME
 WORKDIR $APP_HOME
 COPY . $APP_HOME

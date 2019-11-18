@@ -1,6 +1,4 @@
-require 'json'
-
-class FCM
+class FcmApi
   URL_BASE = 'https://fcm.googleapis.com/fcm'
 
   def initialize(api_key, client_options = {})
