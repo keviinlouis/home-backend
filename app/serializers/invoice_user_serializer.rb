@@ -3,4 +3,8 @@ class InvoiceUserSerializer < ActiveModel::Serializer
   belongs_to :invoice
   belongs_to :user
 
+  def user
+    UserSerializer.new object.user
+  end
+
 end

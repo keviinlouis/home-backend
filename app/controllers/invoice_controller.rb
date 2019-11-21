@@ -2,13 +2,21 @@ class InvoiceController < ApplicationController
   def index
     page = params[:page] || 1
     limit = params[:limit] || 20
+    status = params[:status].to_s.parameterize.underscore.to_sym
+    bill = params[:bill]
 
-    invoices = Invoice.joins(:invoice_users)
-                 .where(status: :available)
-                  .where(invoice_users: { user_id: @user.id })
-                 .paginate(page: page, per_page: limit)
+    query = Invoice.joins(:invoice_users)
+              .where(invoice_users: { user_id: @user.id })
 
-    render json: invoices
+    if status && InvoiceUser.statuses.include?(status)
+      query = query.where(status: status)
+    end
+
+    if bill
+      query = query.where(bill_id: bill)
+    end
+
+    render json: query.paginate(page: page, per_page: limit)
   end
 
   def update
