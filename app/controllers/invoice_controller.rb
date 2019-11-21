@@ -19,6 +19,14 @@ class InvoiceController < ApplicationController
     render json: query.paginate(page: page, per_page: limit)
   end
 
+  def show
+    @invoice = current_user.invoices.includes(:invoice_users).find_by_id(params[:id])
+
+    return render json: {}, status: 404 if @invoice.nil?
+
+    render json: @invoice
+  end
+
   def update
     invoice = Invoice.find(params[:id])
 
