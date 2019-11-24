@@ -1,7 +1,7 @@
 class Bill < ApplicationRecord
   acts_as_paranoid
 
-  EVENTS = [:created, :update_details, :update_users, :user_accepted, :user_rejected, :deleted]
+  EVENTS = [:created, :update_details, :update_users, :user_accepted, :user_refused, :deleted]
 
   enum frequency_type: [:day, :week, :month, :year]
 
@@ -32,7 +32,7 @@ class Bill < ApplicationRecord
       message = "#{message} atualizou os usuários da conta"
     when :user_accepted
       message = "#{message} aceitou a conta"
-    when :user_rejected
+    when :user_refused
       message = "#{message} rejeitou a conta"
     else
       message = "#{message} atualizou a conta"
