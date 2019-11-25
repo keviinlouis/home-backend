@@ -27,16 +27,6 @@ class InvoiceController < ApplicationController
     render json: @invoice
   end
 
-  def update
-    invoice = Invoice.find(params[:id])
-
-    return render json: {}, status: 404 if invoice.nil? || invoice.bill.user_id != @user.id
-
-    invoice.update status: :available
-
-    render json: invoice.reload
-  end
-
   private
 
   def invoice_where_params

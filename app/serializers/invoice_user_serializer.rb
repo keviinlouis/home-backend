@@ -1,5 +1,5 @@
 class InvoiceUserSerializer < ActiveModel::Serializer
-  attributes :id, :amount, :expires_at, :status, :user
+  attributes :id, :amount, :expires_at, :status, :user, :total_payed
   belongs_to :invoice
   belongs_to :user
 

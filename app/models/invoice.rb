@@ -14,8 +14,8 @@ class Invoice < ApplicationRecord
   end
 
   def update_invoice_users
-    bill.bill_users.where('percent is not null').each do |bill_user|
-      invoice_user = invoice_users.where(user_id: bill_user.user_id).first
+    bill.bill_users.with_percent.each do |bill_user|
+      invoice_user = invoice_users.where(user_id: bill_user.user_id, status: :available).first
 
       return create_invoice_user_by_bill_user(bill_user) if invoice_user.nil?
 
@@ -37,7 +37,8 @@ class Invoice < ApplicationRecord
     invoice_user.update(
       amount: bill_user.amount,
       expires_at: expires_at,
-      status: status
+      status: status,
+      bill_user: bill_user
     )
   end
 

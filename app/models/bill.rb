@@ -59,23 +59,19 @@ class Bill < ApplicationRecord
   end
 
   def cancel_next_invoice
-    last_invoice = invoices.order(created_at: :desc).first
-
     return if last_invoice.nil? || last_invoice.paid?
 
     last_invoice.update status: :canceled
   end
 
   def last_invoice
-    invoices.order(created_at: :desc).first
+    @last_invoice ||= invoices.order(created_at: :desc).first
   end
 
   def date_to_next_invoice
-    last_invoice = invoices.last
     last_date = last_invoice ? last_invoice.expires_at : DateTime.now
     last_date + frequency.send(frequency_type)
   end
-
 
   def update_users(users)
     total_percent = users.map { |user| user["percent"] }.sum
@@ -92,29 +88,23 @@ class Bill < ApplicationRecord
 
       attribute_leftovers_to_owner
 
-      update_or_create_invoice
-
-      rollback_all_users if bill_users.count == 1
+      active_all_users if bill_users.count == 1
 
       raise ActiveRecord::Rollback if errors.any?
     end
   end
 
   def active_all_users
-    bill_users.reload.each do |bill_user|
-      bill_user.update status: :active
-    end
+    bill_users.reload.each { |bill_user| bill_user.update status: :active }
 
-    last_invoice = self.last_invoice
     last_invoice.update_invoice_users if last_invoice && last_invoice.available?
   end
 
   def rollback_all_users
-    bill_users.reload.each do |bill_user|
-      bill_user.update status: :active, next_percent: nil
-    end
+    bill_users.reload.each { |bill_user| bill_user.update status: :active, next_percent: nil, next_amount: nil }
 
-    last_invoice = self.last_invoice
+    bill_users.without_percent.destroy_all
+
     last_invoice.update_invoice_users if last_invoice && last_invoice.available?
   end
 
@@ -127,11 +117,11 @@ class Bill < ApplicationRecord
   end
 
   def new_users
-    bill_users.where('percent is null')
+    bill_users.without_percent
   end
 
   def old_users
-    bill_users.where('percent is not null')
+    bill_users.with_percent
   end
 
   def remove_next_state_users
@@ -150,8 +140,6 @@ class Bill < ApplicationRecord
   def attribute_leftovers_to_owner
     total_percent = bill_users.reload.map(&:percent).reject(&:nil?).sum
 
-    puts total_percent
-
     leftovers_percent = 100 - total_percent
 
     return if leftovers_percent <= 0
@@ -168,7 +156,6 @@ class Bill < ApplicationRecord
   private
 
   def update_user(user, index = 0)
-
     bill_user = bill_users.where(user_id: user["id"]).first || BillUser.new(bill_id: self.id, user_id: user["id"])
 
     bill_user.next_percent = user["percent"]

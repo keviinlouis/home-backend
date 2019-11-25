@@ -10,6 +10,8 @@ Rails.application.routes.draw do
 
   resources :notification, only: [:index, :update]
 
+  resources :invoice_user_payment, only: [:index, :create, :destroy]
+
   resources :bill do
     resources :bill_user, only: :create, :path => '/bill-user'
 
@@ -19,8 +21,5 @@ Rails.application.routes.draw do
     resources :bill_event, only: [:index, :create, :delete], :path => '/events'
   end
 
-  post 'invoice/:id/pay', to: 'invoice_user#pay'
-
-  resources :invoice
-
+  resources :invoice, only: [:index, :show]
 end
