@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_12_233606) do
+ActiveRecord::Schema.define(version: 2019_11_25_191835) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 2019_11_12_233606) do
     t.float "percent"
     t.integer "status", default: 0
     t.float "next_percent"
+    t.float "next_amount"
     t.index ["bill_id"], name: "index_bill_users_on_bill_id"
     t.index ["user_id"], name: "index_bill_users_on_user_id"
   end

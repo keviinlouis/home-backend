@@ -94,14 +94,24 @@ class Bill < ApplicationRecord
 
       update_or_create_invoice
 
-      raise ActiveRecord::Rollback if errors.any?
+      rollback_all_users if bill_users.count == 1
 
+      raise ActiveRecord::Rollback if errors.any?
     end
   end
 
   def active_all_users
     bill_users.reload.each do |bill_user|
       bill_user.update status: :active
+    end
+
+    last_invoice = self.last_invoice
+    last_invoice.update_invoice_users if last_invoice && last_invoice.available?
+  end
+
+  def rollback_all_users
+    bill_users.reload.each do |bill_user|
+      bill_user.update status: :active, next_percent: nil
     end
 
     last_invoice = self.last_invoice
