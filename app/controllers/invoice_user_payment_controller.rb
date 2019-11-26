@@ -9,8 +9,7 @@ class InvoiceUserPaymentController < ApplicationController
   end
 
   def create
-    @invoice_user.pay(payment_params)
-    render json: @invoice_user
+    render json: @invoice_user.pay(payment_params)
   end
 
   def destroy
@@ -39,6 +38,6 @@ class InvoiceUserPaymentController < ApplicationController
   end
 
   def payment_params
-    params.only(:amount, :document_path)
+    params.permit(:amount, :document_path)
   end
 end

@@ -9,9 +9,10 @@ class InvoiceUser < ApplicationRecord
   enum status: [:available, :paid, :pending, :expired, :canceled]
 
   def pay(payment_data)
-    invoice_user_payment.create(payment_data)
+    payment = invoice_user_payment.create(payment_data)
     update status: can_be_marked_as_payed? ? :paid : :pending
     invoice.update_status_if_everyone_paid
+    payment
   end
 
   def total_payed
