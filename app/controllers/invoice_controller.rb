@@ -5,8 +5,8 @@ class InvoiceController < ApplicationController
     status = params[:status].to_s.parameterize.underscore.to_sym
     bill = params[:bill]
 
-    query = Invoice.joins(:invoice_users)
-              .where(invoice_users: { user_id: @user.id })
+    query = Invoice.joins(bill: :bill_users)
+              .where(bill: {bill_users: { user_id: current_user.id }})
 
     if status && InvoiceUser.statuses.include?(status)
       query = query.where(status: status)
@@ -20,9 +20,11 @@ class InvoiceController < ApplicationController
   end
 
   def show
-    @invoice = current_user.invoices.includes(:invoice_users).find_by_id(params[:id])
+    @invoice = Invoice.find_by_id(params[:id])
 
-    return render json: {}, status: 404 if @invoice.nil?
+    unless @invoice.bill.bill_users.find_by(user_id: current_user.id) && @invoice.present?
+      return render json: {}, status: :not_found
+    end
 
     render json: @invoice
   end

@@ -45,5 +45,9 @@ class Invoice < ApplicationRecord
   def update_status_if_everyone_paid
     update status: :paid unless invoice_users.where.not(status: :paid).exists?
   end
+
+  def bill_user?(id)
+    bill.bill_users.find_by(user_id: id).present?
+  end
 end
 
