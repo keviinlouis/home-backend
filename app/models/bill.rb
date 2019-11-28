@@ -19,6 +19,7 @@ class Bill < ApplicationRecord
   after_create :create_invoice
   after_update :update_amount_on_bill_users
   after_update :update_or_create_invoice
+  after_update :update_invoice_worker, if: :timestamps_changed?
   before_destroy :cancel_next_invoice
 
   def add_event(event, user)
@@ -48,6 +49,7 @@ class Bill < ApplicationRecord
   def create_invoice
     status = pending_users? ? :pending : :available
     invoices.create(amount: amount, expires_at: date_to_next_invoice, number: invoices.count, status: status)
+    schedule_next_invoice
   end
 
   def update_or_create_invoice
@@ -58,10 +60,26 @@ class Bill < ApplicationRecord
     last_invoice.update amount: amount, expires_at: expires_at
   end
 
+  def schedule_next_invoice
+    update next_invoice_jid: InvoiceWorker.perform_at(created_at + (frequency.send(frequency_type) * invoices.size), bill_id: id)
+  end
+
+  def cancel_invoice_worker
+    return if next_invoice_jid.blank?
+    InvoiceWorker.cancel!(next_invoice_jid)
+    update next_invoice_jid: nil
+  end
+
+  def update_invoice_worker
+    cancel_invoice_worker
+    schedule_next_invoice
+  end
+
   def cancel_next_invoice
     return if last_invoice.nil? || last_invoice.paid?
 
     last_invoice.update status: :canceled
+    cancel_invoice_worker
   end
 
   def last_invoice
@@ -183,6 +201,12 @@ class Bill < ApplicationRecord
       bill_user.save
     end
     last_invoice.update_invoice_users
+  end
+
+  def timestamps_changed?
+    timestamps = %w(frequency frequency_type expires_at)
+
+    timestamps.any? { |attribute| saved_changes[attribute].present? }
   end
 
 end

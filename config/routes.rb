@@ -22,4 +22,7 @@ Rails.application.routes.draw do
   end
 
   resources :invoice, only: [:index, :show]
+
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
 end

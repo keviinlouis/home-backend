@@ -42,6 +42,8 @@ gem 'enum_attributes_validation'
 
 gem 'rails-i18n'
 
+gem 'sidekiq'
+
 
 group :development, :test do
   gem "pry"
