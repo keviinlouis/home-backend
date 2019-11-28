@@ -44,6 +44,8 @@ gem 'rails-i18n'
 
 gem 'sidekiq'
 
+gem 'scout_apm'
+
 
 group :development, :test do
   gem "pry"
