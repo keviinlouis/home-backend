@@ -50,7 +50,7 @@ class Bill < ApplicationRecord
 
   def create_invoice
     status = pending_users? ? :pending : :available
-    invoices.create(amount: amount, expires_at: date_to_next_invoice, number: invoices.count, status: status)
+    invoices.create(amount: amount, number: invoices.count, status: status)
     schedule_next_invoice
   end
 
@@ -63,6 +63,7 @@ class Bill < ApplicationRecord
   end
 
   def schedule_next_invoice
+    return unless frequency? && frequency_type?
     update next_invoice_jid: InvoiceWorker.perform_at(created_at + (frequency.send(frequency_type) * invoices.size), bill_id: id)
   end
 
@@ -90,7 +91,8 @@ class Bill < ApplicationRecord
 
   def date_to_next_invoice
     last_date = last_invoice ? last_invoice.expires_at : DateTime.now
-    last_date + frequency.send(frequency_type)
+    last_date + frequency.send(frequency_type) if frequency? && frequency_type?
+    last_date
   end
 
   def update_users(users)
