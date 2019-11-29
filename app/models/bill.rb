@@ -11,7 +11,9 @@ class Bill < ApplicationRecord
   has_many :bill_users
   has_many :invoices
 
-  validates_presence_of :amount, :frequency, :frequency_type, :name
+  validates_presence_of :amount, :name
+  validates_presence_of :frequency_type, if: :frequency?
+  validates_presence_of :frequency, if: :frequency_type?
 
   validate_enum_attributes :frequency_type
 
@@ -140,6 +142,10 @@ class Bill < ApplicationRecord
 
   def old_users
     bill_users.with_percent
+  end
+
+  def repeats?
+    frequency? && frequency_type?
   end
 
   def remove_next_state_users
