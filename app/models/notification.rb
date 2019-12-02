@@ -2,14 +2,13 @@ class Notification < ApplicationRecord
   belongs_to :user
   belongs_to :resource, :polymorphic => true
 
-  after_save :schedule_notification, if: :sendable
+  after_save :schedule_notification, if: :sendable?
 
   enum notification_types: [:bill_added, :bill_updated, :bill_refused, :bill_accepted]
   enum status: [:created, :sent, :readed, :error]
 
   def schedule_notification
-    fcm_api.send_to device_tokens, notification_payload, resource_payload
-    update status: :sent
+    FcmNotificationWorker.perform_async id: id
   end
 
   def read!
@@ -69,24 +68,21 @@ class Notification < ApplicationRecord
 
     notification = self.new unless notification
 
-    data.merge({
+    default_data = {
       resource: resource,
-      user: user,
+      user_id: user.id,
       opened: false,
       status: :created,
-    })
+    }
 
-    notification.attributes = data
+    notification.attributes = data.merge(default_data)
+
     notification.save
   end
 
-  def sendable
+  def sendable?
     !opened? && !readed? && created?
   end
-
-
-
-  private
 
   def device_tokens
     user.device.where('fcm_token is not null').pluck(:fcm_token)
@@ -98,9 +94,5 @@ class Notification < ApplicationRecord
 
   def resource_payload
     { id: resource.id, type: resource_type, click_action: "FLUTTER_NOTIFICATION_CLICK" }
-  end
-
-  def fcm_api
-    FcmApi.new ENV.fetch('FCM_AUTH_KEY')
   end
 end
