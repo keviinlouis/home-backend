@@ -6,6 +6,7 @@ class InvoiceUserPayment < ApplicationRecord
   belongs_to :invoice_user
 
   def image_url
+    return unless image.attached?
     url_for(image)
   end
 end
