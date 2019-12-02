@@ -46,6 +46,7 @@ gem 'sidekiq'
 
 gem 'scout_apm'
 
+gem 'cloudinary'
 
 group :development, :test do
   gem "pry"

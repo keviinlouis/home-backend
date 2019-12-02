@@ -1,3 +1,3 @@
 class InvoiceUserPaymentSerializer < ActiveModel::Serializer
-  attributes :id, :amount, :document_path, :invoice_user
+  attributes :id, :amount, :invoice_user, :image_url
 end

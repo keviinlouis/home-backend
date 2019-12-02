@@ -38,6 +38,6 @@ class InvoiceUserPaymentController < ApplicationController
   end
 
   def payment_params
-    params.permit(:amount, :document_path)
+    params.permit(:amount, :image)
   end
 end

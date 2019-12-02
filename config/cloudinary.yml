@@ -1,0 +1,19 @@
+---
+development:
+  cloud_name: djaf70mbx
+  api_key: '595427183685224'
+  api_secret: RjpqSU7z7cRPoQ3AsBdZROgIPRY
+  enhance_image_tag: true
+  static_file_support: false
+production:
+  cloud_name: djaf70mbx
+  api_key: '595427183685224'
+  api_secret: RjpqSU7z7cRPoQ3AsBdZROgIPRY
+  enhance_image_tag: true
+  static_file_support: true
+test:
+  cloud_name: djaf70mbx
+  api_key: '595427183685224'
+  api_secret: RjpqSU7z7cRPoQ3AsBdZROgIPRY
+  enhance_image_tag: true
+  static_file_support: false
