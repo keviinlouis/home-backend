@@ -47,6 +47,8 @@ class UserController < ApplicationController
     query = "%#{params[:query] || ''}%"
     exclude = params[:exclude] || []
 
+    exclude << current_user.id
+
     users = User.where.not(id: exclude)
 
     # Improve with elastic search

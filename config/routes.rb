@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   post '/login', to: 'user#login'
   get '/me', to: 'user#me'
   put '/me/device', to: 'user#device'
-  delete '/me/device/:id', to: 'user#remove_device'
+  delete '/me/device', to: 'user#remove_device'
   resources :user
 
   resources :notification, only: [:index, :update]
