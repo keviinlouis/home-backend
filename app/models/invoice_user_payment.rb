@@ -5,6 +5,8 @@ class InvoiceUserPayment < ApplicationRecord
 
   belongs_to :invoice_user
 
+  validates :amount, numericality: { greater_than: 0 }
+
   def image_url
     url_for(image)
   end
