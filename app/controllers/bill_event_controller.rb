@@ -1,5 +1,5 @@
 class BillEventController < ApplicationController
-  before_action :load_bill
+  before_action :load_bill, except: [:destroy]
 
   def index
     page = params[:page] || 1
@@ -11,12 +11,12 @@ class BillEventController < ApplicationController
   end
 
   def create
-    bill_event = @bill.bill_events.create(user: @user, kind: :message, message: params[:message])
+    bill_event = @bill.bill_events.create(user: current_user, kind: :message, message: params[:message])
     render json: bill_event, status: :created
   end
 
   def destroy
-    bill_event = @bill.bill_events.where(user_id: @user.id, id: params[:id]).first
+    bill_event = BillEvent.where(user_id: current_user.id, id: params[:id]).first
 
     return render json: {}, status: :not_found unless bill_event.present?
 

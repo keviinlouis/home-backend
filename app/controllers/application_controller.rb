@@ -24,7 +24,7 @@ class ApplicationController < ActionController::API
   def load_bill
     bill_id = params[:bill_id]
 
-    @bill = @user.bills.find(bill_id)
+    @bill = current_user.bills.find(bill_id)
 
   rescue
     render json: {}, status: :not_found

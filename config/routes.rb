@@ -20,8 +20,10 @@ Rails.application.routes.draw do
     post '/accept', action: :accept
     post '/refuse', action: :refuse
 
-    resources :bill_event, only: [:index, :create, :delete], :path => '/events'
+    resources :bill_event, only: [:index, :create], :path => '/events'
   end
+
+  resources :bill_event, only: [:destroy], :path => '/event'
 
   resources :invoice, only: [:index, :show]
 
