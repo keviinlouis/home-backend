@@ -15,3 +15,4 @@ services:
 env:
   global:
     - RAILS_ENV=test
+    - CODECOV_TOKEN=bdc37889-819f-4f8d-b47e-8ce0b9d1790b
