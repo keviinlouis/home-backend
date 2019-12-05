@@ -213,11 +213,18 @@ RSpec.describe BillController, type: :controller do
     context 'when current user has been added to bill' do
       before(:each) do
         @bill = create(:bill)
-        bill_users = [
+        @bill_users = [
           { id: @bill.user.id, percent: 50.0 },
           { id: @current_user.id, percent: 50.0 }
         ]
-        @bill.update_users bill_users
+        @bill.update_users @bill_users
+        @bill.reload
+        @bill.bill_users.each do |bill_user|
+          bill_user_config = @bill_users.find {|item| item[:id] == bill_user.id}
+          expect(bill_user_config).not_to be_nil
+          expect(bill_user_config[:percent]).to eq bill_user.next_percent
+          expect(bill_user.next_amount).not_to be_nil
+        end
       end
 
       it 'should be able to accept a bill that current user has been added' do
@@ -226,9 +233,15 @@ RSpec.describe BillController, type: :controller do
         expect(response).to have_http_status :success
 
         @bill.reload
-        user_ids = [@bill.user.id, @current_user.id]
-        @bill.bill_users.each { |bill_user| expect(user_ids).to include bill_user.id }
+        @bill.bill_users.each do |bill_user|
+          bill_user_config = @bill_users.find {|item| item[:id] == bill_user.id}
+          expect(bill_user_config).not_to be_nil
+          expect(bill_user_config[:percent]).to eq bill_user.percent
+          expect(bill_user.next_percent).to be_nil
+          expect(bill_user.next_amount).to be_nil
+        end
         expect(BillEvent.count).to eq 1
+
       end
 
       it 'should be able to accept even when current user is already accepted' do
