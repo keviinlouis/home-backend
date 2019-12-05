@@ -100,7 +100,8 @@ class Bill < ApplicationRecord
 
   def update_users(users)
     users = users.map {|t| t.transform_keys(&:to_sym)}
-    total_percent = users.map { |user| user[:percent] }.sum
+
+    total_percent = users.map { |user| user[:percent].to_f }.sum
 
     return errors.add(:percent, 'As somas das porcentagens devem ser igual a 100') if total_percent != 100
 
@@ -112,18 +113,18 @@ class Bill < ApplicationRecord
         update_user(user, index)
       end
 
-      attribute_leftovers_to_owner
+      raise ActiveRecord::Rollback if errors.any?
+
+      attribute_leftovers_to_owner(in_next_percent: true)
 
       active_all_users if bill_users.count == 1
-
-      raise ActiveRecord::Rollback if errors.any?
     end
   end
 
   def active_all_users
     bill_users.reload.each { |bill_user| bill_user.update status: :active }
 
-    last_invoice.update_invoice_users if last_invoice && last_invoice.available?
+    last_invoice.update_invoice_users if last_invoice&.available?
   end
 
   def rollback_all_users
@@ -131,7 +132,7 @@ class Bill < ApplicationRecord
 
     bill_users.without_percent.destroy_all
 
-    last_invoice.update_invoice_users if last_invoice && last_invoice.available?
+    last_invoice.update_invoice_users if last_invoice&.available?
   end
 
   def pending_users?
@@ -167,8 +168,13 @@ class Bill < ApplicationRecord
     attribute_leftovers_to_owner
   end
 
-  def attribute_leftovers_to_owner
-    total_percent = bill_users.reload.map(&:percent).reject(&:nil?).sum
+  def attribute_leftovers_to_owner(options = {})
+    percents = if options[:in_next_percent]
+                 bill_users.reload.map(&:next_percent).reject(&:nil?)
+               else
+                 bill_users.reload.map(&:percent).reject(&:nil?)
+               end
+    total_percent = percents.sum
 
     leftovers_percent = 100 - total_percent
 
@@ -176,7 +182,8 @@ class Bill < ApplicationRecord
 
     owner = owner_user_in_bill_users
 
-    owner.update percent: owner.percent + leftovers_percent
+    owner.update percent: owner.percent + leftovers_percent if options[:in_next_percent]
+    owner.update next_percent: owner.next_percent + leftovers_percent if options[:in_next_percent]
   end
 
   def owner_user_in_bill_users
@@ -188,7 +195,7 @@ class Bill < ApplicationRecord
   def update_user(user, index = 0)
     bill_user = bill_users.where(user_id: user[:id]).first || BillUser.new(bill_id: self.id, user_id: user[:id])
 
-    bill_user.next_percent = user[:percent]
+    bill_user.next_percent = user[:percent].to_f
 
     bill_user.status = bill_user.user_id == self.user_id ? :waiting_others : :pending
 
