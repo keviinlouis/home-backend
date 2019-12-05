@@ -14,4 +14,4 @@ services:
   - redis-server
 env:
   global:
-    - RAILS_ENV=env
+    - RAILS_ENV=test
