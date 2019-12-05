@@ -106,13 +106,132 @@ RSpec.describe UserController, type: :controller do
     end
   end
   describe '#create' do
+    it 'should return new user with new device' do
+      password = '12345678'
+      user = build(:user)
+      expect(User.count).to eq 1
+      post :create, params: { name: user.name, email: user.email, password: password }
 
+      expect(response).to have_http_status(:success)
+
+      expect(User.count).to eq 2
+      expect(Device.count).to eq 1
+      json_response = JSON.parse(response.body)
+
+      attributes = %w(id name email token device)
+
+      attributes.each { |attribute| expect(json_response.keys).to include(attribute) }
+
+      expect(json_response['name']).to eq user.name
+      expect(json_response['email']).to eq user.email
+
+      device_id = json_response['device']
+
+      post :login, params: {email: user.email, password: password, device_id: device_id}
+
+      expect(response).to have_http_status(:success)
+      json_response = JSON.parse(response.body)
+
+      attributes = %w(id name email token device)
+
+      attributes.each { |attribute| expect(json_response.keys).to include(attribute) }
+
+      expect(json_response['name']).to eq user.name
+      expect(json_response['email']).to eq user.email
+      expect(json_response['device']).to eq device_id
+    end
+    context 'with wrong data' do
+      before(:all) do
+        @password = '12345678'
+      end
+      it 'should return email already exists' do
+
+        user = build(:user)
+        user.email = @current_user.email
+        send_wrong_create name: user.name, email: user.email, password: @password
+      end
+      it 'should return missing email field' do
+        user = build(:user)
+        send_wrong_create name: user.name, password: @password
+      end
+
+      it 'should return missing name field' do
+        user = build(:user)
+        send_wrong_create email: user.email, password: @password
+      end
+
+      it 'should return missing password field' do
+        user = build(:user)
+        send_wrong_create name: user.name,  email: user.email
+      end
+    end
   end
   describe '#update' do
+    it 'should update user data' do
+      new_name = 'new name'
+      new_email = 'new@mail.com'
+      request.headers.merge! @headers
+      put :update, params: { name: new_name, email: new_email }
+      @current_user.reload
+      match_user_response(without_auth: true)
+      expect(new_name).to eq @current_user.name
+      expect(new_email).to eq @current_user.email
+    end
 
+    it 'should update user data even when is same email' do
+      new_name = 'new name'
+      new_email = @current_user.email
+      request.headers.merge! @headers
+      put :update, params: { name: new_name, email: new_email }
+      @current_user.reload
+      match_user_response(without_auth: true)
+      expect(new_name).to eq @current_user.name
+      expect(new_email).to eq @current_user.email
+    end
+
+    it 'should return email exists' do
+      other_user = create(:user)
+      old_email = @current_user.reload.email
+      new_name = 'new name'
+      new_email = other_user.email
+      request.headers.merge! @headers
+      put :update, params: { name: new_name, email: new_email }
+      expect(response).to have_http_status(:unprocessable_entity)
+      json_response = JSON.parse(response.body)
+      expect(json_response.keys).to match_array(%w(errors))
+      @current_user.reload
+      expect(old_email).to eq @current_user.email
+
+    end
+
+    context 'when trying to update password' do
+      it 'should return update password' do
+        new_password = 'new_password'
+        request.headers.merge! @headers
+        put :update, params: { password: new_password, password_confirmation: new_password }
+        expect(response).to have_http_status(:success)
+        match_user_response(without_auth: true)
+        post :login, params: {email: @current_user.email, password: new_password}
+        expect(response).to have_http_status(:success)
+      end
+
+      it 'should return password dont match' do
+        new_password = 'new_password'
+        request.headers.merge! @headers
+        put :update, params: { password: new_password, password_confirmation: 'wrong_password_confirmation' }
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
   end
-  describe '#destroy' do
 
+  describe '#destroy' do
+    it 'should delete user' do
+      request.headers.merge! @headers
+      delete :destroy
+      expect(response).to have_http_status(:success)
+      expect(User.count).to eq 0
+      # TODO Check if bills are deleted
+    end
   end
 
   private
@@ -148,5 +267,18 @@ RSpec.describe UserController, type: :controller do
     expect(json_response['id']).to eq @current_user.id
     expect(json_response['name']).to eq @current_user.name
     expect(json_response['email']).to eq @current_user.email
+  end
+
+  def send_wrong_create(payload)
+    expect(User.count).to eq 1
+    post :create, params: payload
+
+    expect(response).to have_http_status(:unprocessable_entity)
+    json_response = JSON.parse(response.body)
+    expect(json_response.keys).to match_array(%w(errors))
+    expect(json_response.keys).not_to match_array(%w(id name email token device))
+    expect(Device.count).to eq 0
+    expect(User.count).to eq 1
+    expect(json_response["errors"].count).to eq 1
   end
 end
