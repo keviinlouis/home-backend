@@ -1,12 +1,15 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
-ENV['RAILS_ENV'] ||= 'test'
+ENV['RAILS_ENV'] = 'test'
 
-require 'simplecov'
-SimpleCov.start
+if ENV.has_key? 'CODECOV_TOKEN'
+  require 'simplecov'
+  SimpleCov.start
 
-require 'codecov'
-SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
+
 
 require File.expand_path('../config/environment', __dir__)
 

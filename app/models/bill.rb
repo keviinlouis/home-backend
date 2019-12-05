@@ -14,14 +14,17 @@ class Bill < ApplicationRecord
   validates_presence_of :amount, :name
   validates_presence_of :frequency_type, if: :frequency?
   validates_presence_of :frequency, if: :frequency_type?
+  validates :expires_at, in_future: true
 
   validate_enum_attributes :frequency_type
 
   after_create :add_owner_user_to_bill
   after_create :create_invoice
+
   after_update :update_amount_on_bill_users
   after_update :update_or_create_invoice
   after_update :update_invoice_worker, if: :timestamps_changed?
+
   before_destroy :cancel_next_invoice
 
   def add_event(event, user)
@@ -64,13 +67,13 @@ class Bill < ApplicationRecord
 
   def schedule_next_invoice
     return unless frequency? && frequency_type?
-    update next_invoice_jid: InvoiceWorker.perform_at(created_at + (frequency.send(frequency_type) * invoices.size), bill_id: id)
+    update_column :next_invoice_jid, InvoiceWorker.perform_at(created_at + (frequency.send(frequency_type) * invoices.size), bill_id: id)
   end
 
   def cancel_invoice_worker
     return if next_invoice_jid.blank?
     InvoiceWorker.cancel!(next_invoice_jid)
-    update next_invoice_jid: nil
+    update_column :next_invoice_jid, nil
   end
 
   def update_invoice_worker
@@ -96,7 +99,8 @@ class Bill < ApplicationRecord
   end
 
   def update_users(users)
-    total_percent = users.map { |user| user["percent"] }.sum
+    users = users.map {|t| t.transform_keys(&:to_sym)}
+    total_percent = users.map { |user| user[:percent] }.sum
 
     return errors.add(:percent, 'As somas das porcentagens devem ser igual a 100') if total_percent != 100
 
@@ -182,9 +186,9 @@ class Bill < ApplicationRecord
   private
 
   def update_user(user, index = 0)
-    bill_user = bill_users.where(user_id: user["id"]).first || BillUser.new(bill_id: self.id, user_id: user["id"])
+    bill_user = bill_users.where(user_id: user[:id]).first || BillUser.new(bill_id: self.id, user_id: user[:id])
 
-    bill_user.next_percent = user["percent"]
+    bill_user.next_percent = user[:percent]
 
     bill_user.status = bill_user.user_id == self.user_id ? :waiting_others : :pending
 
@@ -196,7 +200,7 @@ class Bill < ApplicationRecord
   def remove_users(users)
     actual_users_ids = bill_users.pluck(:user_id)
 
-    new_ids = users.map { |user| user["id"] }
+    new_ids = users.map { |user| user[:id] }
 
     removed_ids = actual_users_ids.reject { |user_id| new_ids.include? user_id }
 

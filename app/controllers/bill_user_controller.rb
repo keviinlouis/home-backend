@@ -10,7 +10,7 @@ class BillUserController < ApplicationController
 
     bill.old_users.where.not(user_id: current_user.id).each { |bill_user| Notification.notify_bill_edited(bill_user.user, bill) }
 
-    return render json: bill.errors, status: :unprocessable_entity if bill.errors.any?
+    return json_with_errors bill.errors if bill.errors.any?
 
     bill.add_event :update_users, @user
 

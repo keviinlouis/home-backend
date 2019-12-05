@@ -1,11 +1,11 @@
 class BillController < ApplicationController
   def index
-    bills = @user.bills.paginate(page: params[:page] || 1, per_page: params[:limit] || 20)
+    bills = current_user.bills.paginate(page: params[:page] || 1, per_page: params[:limit] || 20)
     render json: bills
   end
 
   def show
-    bill = @user.bills.find(params[:id])
+    bill = current_user.bills.find(params[:id])
 
     render json: bill
   rescue ActiveRecord::RecordNotFound
@@ -13,21 +13,21 @@ class BillController < ApplicationController
   end
 
   def create
-    bill = @user.owner_bills.create(store_params)
+    bill = current_user.owner_bills.create(store_params)
 
-    return render json: bill.errors, status: :unprocessable_entity if bill.errors.any?
+    return json_with_errors bill.errors if bill.errors.any?
 
-    bill.add_event :created, @user
+    bill.add_event :created, current_user
 
     render json: bill, status: :created
   end
 
   def update
-    bill = @user.owner_bills.find(params[:id])
+    bill = current_user.owner_bills.find(params[:id])
 
     bill.update update_params
 
-    bill.add_event :update_details, @user
+    bill.add_event :update_details, current_user
 
     render json: bill
   rescue ActiveRecord::RecordNotFound
@@ -35,11 +35,11 @@ class BillController < ApplicationController
   end
 
   def destroy
-    bill = @user.bills.find(params[:id])
+    bill = current_user.bills.find(params[:id])
 
     bill.destroy
 
-    bill.add_event :deleted, @user
+    bill.add_event :deleted, current_user
 
     render json: bill
   rescue ActiveRecord::RecordNotFound
@@ -47,7 +47,7 @@ class BillController < ApplicationController
   end
 
   def accept
-    bill_user = BillUser.where(user_id: @user.id, bill_id: params[:bill_id]).first
+    bill_user = BillUser.where(user_id: current_user.id, bill_id: params[:bill_id]).first
 
     return render json: {}, status: :not_found unless bill_user.present?
 
@@ -59,7 +59,7 @@ class BillController < ApplicationController
 
     Notification.notify_user_accept_bill(bill, bill_user.user)
 
-    bill.add_event :user_accepted, @user
+    bill.add_event :user_accepted, current_user
 
     bill.active_all_users unless bill.pending_users?
 
@@ -67,7 +67,7 @@ class BillController < ApplicationController
   end
 
   def refuse
-    bill_user = BillUser.where(user_id: @user.id, bill_id: params[:bill_id]).first
+    bill_user = BillUser.where(user_id: current_user.id, bill_id: params[:bill_id]).first
 
     return render json: {}, status: :not_found unless bill_user.present?
 
@@ -75,7 +75,7 @@ class BillController < ApplicationController
 
     Notification.notify_user_refused_bill(bill, bill_user.user)
 
-    bill.add_event :user_refused, @user
+    bill.add_event :user_refused, current_user
 
     bill.remove_next_state_users
 

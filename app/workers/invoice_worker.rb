@@ -2,7 +2,6 @@ class InvoiceWorker
   include Sidekiq::Worker
 
   def perform(data)
-    puts data
     bill = Bill.find data["bill_id"]
     bill.create_invoice
   end

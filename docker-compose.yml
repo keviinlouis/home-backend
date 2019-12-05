@@ -23,7 +23,6 @@ services:
       - DATABASE_URL=postgres
       - REDIS_URL=redis://redis:6379
       - FCM_AUTH_KEY=AAAAimsF8i4:APA91bEVoYjiN4vcJfNLi8tg5iF2_CEbiri1q-EmoeoyhkHKVFLZ7TXVUFd5XkNBu6np0eK78cX8WjOEXB-DJYxOpjdA98J4RqLK76oJXFLTnggrQaMbQZRQMGacB1MAGNeLUrp1cMu0
-      - CODECOV_TOKEN=bdc37889-819f-4f8d-b47e-8ce0b9d1790b
     links:
       - postgres
       - elasticsearch
