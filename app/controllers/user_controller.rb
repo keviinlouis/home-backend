@@ -16,7 +16,7 @@ class UserController < ApplicationController
 
     if device_id.present?
       device = Device.where(id: device_id, user: user).first
-      device_id = user.device.create.id if device.blank?
+      device_id = device.present? ? device.id : user.device.create.id
     else
       device_id = user.device.create.id
     end
@@ -46,6 +46,8 @@ class UserController < ApplicationController
   def index
     query = "%#{params[:query] || ''}%"
     exclude = params[:exclude] || []
+
+    exclude << current_user.id
 
     users = User.where.not(id: exclude)
 

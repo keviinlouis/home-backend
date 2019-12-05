@@ -62,4 +62,19 @@ Rails.application.configure do
   config.debug_exception_response_format = :api
 
   Rails.application.routes.default_url_options = { host: "http://localhost:3002" }
+
+  config.generators do |g|
+    g.test_framework :rspec
+    g.fixture_replacement :factory_bot
+    g.factory_bot dir: 'spec/factories'
+    g.controller_specs true
+    g.request_specs true
+    g.helper_specs false
+    g.feature_specs true
+    g.mailer_specs true
+    g.model_specs true
+    g.observer_specs false
+    g.routing_specs false
+    g.view_specs false
+  end
 end

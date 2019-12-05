@@ -5,9 +5,11 @@ Rails.application.routes.draw do
   post '/login', to: 'user#login'
   get '/me', to: 'user#me'
   put '/me/device', to: 'user#device'
-  delete '/me/device/:id', to: 'user#remove_device'
-  resources :user
+  delete '/me/device', to: 'user#remove_device'
 
+  resources :user, except: [:update, :delete]
+  put '/user', to: 'user#update'
+  delete '/user', to: 'user#destroy'
   resources :notification, only: [:index, :update]
 
   resources :invoice_user_payment, only: [:index, :create, :destroy]
