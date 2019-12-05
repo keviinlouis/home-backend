@@ -69,68 +69,46 @@ RSpec.describe BillController, type: :controller do
   describe '#create' do
     before(:each) do
       Sidekiq::ScheduledSet.new.clear
-    end
-    it 'should create a bill without frequency setup' do
-      data = {
+      @data = {
         name: 'New Bill',
         amount: 15.50
       }
-
-      create_success_bill data
+    end
+    it 'should create a bill without frequency setup' do
+      create_success_bill @data
     end
 
     it 'should create a bill with frequency setup' do
-      data = {
-        name: 'New Bill',
-        amount: 15.50,
-        frequency: 15,
-        frequency_type: "day"
-      }
+      @data[:frequency] = 15
+      @data[:frequency_type] = "day"
 
-      create_success_bill data
+      create_success_bill @data
     end
 
     it 'should create a bill with description' do
-      data = {
-        name: 'New Bill',
-        amount: 15.50,
-        frequency: 15,
-        frequency_type: "day",
-        description: 'A New bill awesome'
-      }
+      @data[:frequency] = 15
+      @data[:frequency_type] = "day"
+      @data[:description] = 'A New bill awesome'
 
-      create_success_bill data
+      create_success_bill @data
     end
 
     context 'with wrong data' do
       it 'should return error when has frequency but frequency_type is empty' do
-        data = {
-          name: 'New Bill',
-          amount: 15.50,
-          frequency: 15,
-          description: 'A New bill awesome'
-        }
-        create_fail_bill data
+        @data[:frequency] = 15
+        @data[:description] = 'A New bill awesome'
+        create_fail_bill @data
       end
 
       it 'should return error when has frequency_type but frequency is empty' do
-        data = {
-          name: 'New Bill',
-          amount: 15.50,
-          frequency_type: "days",
-          description: 'A New bill awesome'
-        }
-        create_fail_bill data
+        @data[:frequency_type] = "day"
+        @data[:description] = 'A New bill awesome'
+        create_fail_bill @data
       end
 
       it 'should return error when expires_at is past' do
-        data = {
-          name: 'New Bill',
-          amount: 15.50,
-          expires_at: DateTime.now - 1.day
-        }
-
-        create_fail_bill data
+        @data[:expires_at] = DateTime.now - 1.day
+        create_fail_bill @data
       end
     end
   end
@@ -138,11 +116,8 @@ RSpec.describe BillController, type: :controller do
     before(:each) do
       Sidekiq::ScheduledSet.new.clear
       @bill = create(:bill, user: @current_user)
-    end
-
-    it 'should update all data successfully' do
       expect(Sidekiq::ScheduledSet.new.count).to eq 1
-      data = {
+      @data = {
         id: @bill.id,
         name: 'New Name',
         amount: @bill.amount + 1,
@@ -150,31 +125,185 @@ RSpec.describe BillController, type: :controller do
         frequency: [*1..30].select { |item| item != @bill.frequency }.sample,
         frequency_type: Bill.frequency_types.keys.select { |item| item != @bill.frequency_type }.sample
       }
+    end
 
+    it 'should update all data successfully' do
+      expect(Sidekiq::ScheduledSet.new.count).to eq 1
 
       request.headers.merge! @headers
-      put :update, params: data
+      put :update, params: @data
       expect(response).to have_http_status :success
       bill = JSON.parse response.body
       expect(Sidekiq::ScheduledSet.new.count).to eq 1
       @bill.reload
-      match_success_bill bill, data, @current_user
+      match_success_bill bill, @data, @current_user
 
-      expect(@bill.name).to eq data[:name]
-      expect(@bill.amount).to eq data[:amount]
-      expect(@bill.frequency).to eq data[:frequency]
-      expect(@bill.frequency_type).to eq data[:frequency_type]
-      expect(@bill.description).to eq data[:description]
+      expect(@bill.name).to eq @data[:name]
+      expect(@bill.amount).to eq @data[:amount]
+      expect(@bill.frequency).to eq @data[:frequency]
+      expect(@bill.frequency_type).to eq @data[:frequency_type]
+      expect(@bill.description).to eq @data[:description]
+    end
+
+    it 'should return error when have frequency but frequency_type is blank' do
+      expect(Sidekiq::ScheduledSet.new.count).to eq 1
+      @bill = create(:bill_without_frequency, user: @current_user)
+      @data.delete(:frequency_type)
+      @data[:id] = @bill.id
+
+      request.headers.merge! @headers
+      put :update, params: @data
+      expect(response).to have_http_status :unprocessable_entity
+    end
+
+    it 'should return error when have frequency_type but frequency is blank' do
+      expect(Sidekiq::ScheduledSet.new.count).to eq 1
+      @bill = create(:bill_without_frequency, user: @current_user)
+      @data.delete(:frequency)
+      @data[:id] = @bill.id
+
+      request.headers.merge! @headers
+      put :update, params: @data
+      expect(response).to have_http_status :unprocessable_entity
+    end
+
+    it 'should return error when expires_at is in past' do
+      expect(Sidekiq::ScheduledSet.new.count).to eq 1
+      @bill.update expires_at: nil
+      @data[:expires_at] = DateTime.now - 1.day
+      request.headers.merge! @headers
+      put :update, params: @data
+      expect(response).to have_http_status :unprocessable_entity
+    end
+
+    it 'should not remove if bill do not belongs to current_user' do
+      @bill = create(:bill)
+      @data[:id] = @bill.id
+      request.headers.merge! @headers
+      put :update, params: @data
+      expect(response).to have_http_status :not_found
     end
   end
   describe '#destroy' do
+    before(:each) do
+      Sidekiq::ScheduledSet.new.clear
+    end
 
+    it 'should remove bill and all dependents' do
+      @bill = create(:bill, user: @current_user)
+      request.headers.merge! @headers
+      delete :destroy, params: { id: @bill.id }
+      expect(Bill.count).to eq 0
+      expect(Invoice.count).to eq 1
+      expect(BillUser.count).to eq 1
+      expect(InvoiceUser.count).to eq 1
+    end
+
+    it 'should remove not bill when bill do not belongs to current_user' do
+      @bill = create(:bill)
+      request.headers.merge! @headers
+      delete :destroy, params: { id: @bill.id }
+      expect(Bill.count).to eq 1
+      expect(Invoice.count).to eq 1
+      expect(BillUser.count).to eq 1
+      expect(InvoiceUser.count).to eq 1
+    end
   end
   describe '#accept' do
+    context 'when current user has been added to bill' do
+      before(:each) do
+        @bill = create(:bill)
+        bill_users = [
+          { id: @bill.user.id, percent: 50.0 },
+          { id: @current_user.id, percent: 50.0 }
+        ]
+        @bill.update_users bill_users
+      end
 
+      it 'should be able to accept a bill that current user has been added' do
+        request.headers.merge! @headers
+        post :accept, params: { bill_id: @bill.id }
+        expect(response).to have_http_status :success
+
+        @bill.reload
+        user_ids = [@bill.user.id, @current_user.id]
+        @bill.bill_users.each { |bill_user| expect(user_ids).to include bill_user.id }
+        expect(BillEvent.count).to eq 1
+      end
+
+      it 'should be able to accept even when current user is already accepted' do
+        request.headers.merge! @headers
+        post :accept, params: { bill_id: @bill.id }
+        expect(response).to have_http_status :success
+
+        @bill.reload
+        user_ids = [@bill.user.id, @current_user.id]
+        @bill.bill_users.each { |bill_user| expect(user_ids).to include bill_user.id }
+        expect(BillEvent.count).to eq 1
+
+        post :accept, params: { bill_id: @bill.id }
+        expect(response).to have_http_status :success
+        expect(BillEvent.count).to eq 1
+      end
+    end
+
+    it 'should not be able to accept when current user is not added to bill' do
+      @bill = create(:bill)
+      request.headers.merge! @headers
+      post :accept, params: { bill_id: @bill.id }
+      expect(response).to have_http_status :not_found
+      expect(BillEvent.count).to eq 0
+
+      @bill.reload
+      user_ids = @bill.bill_users.pluck(:user_id)
+      expect(user_ids).not_to include @current_user.id
+    end
   end
   describe '#refuse' do
+    context 'when current user has been added to bill' do
+      before(:each) do
+        @bill = create(:bill)
+        bill_users = [
+          { id: @bill.user.id, percent: 50.0 },
+          { id: @current_user.id, percent: 50.0 }
+        ]
+        @bill.update_users bill_users
+      end
 
+      it 'should be able to refuse a bill' do
+        request.headers.merge! @headers
+        post :refuse, params: { bill_id: @bill.id }
+        expect(response).to have_http_status :success
+        expect(BillEvent.count).to eq 1
+
+        @bill.reload
+        user_ids = @bill.bill_users.pluck(:user_id)
+        expect(user_ids).not_to include @current_user.id
+      end
+
+      it 'should not be able to refuse when current user is already refused' do
+        request.headers.merge! @headers
+        post :refuse, params: { bill_id: @bill.id }
+        expect(response).to have_http_status :success
+        expect(BillEvent.count).to eq 1
+
+        @bill.reload
+        user_ids = @bill.bill_users.pluck(:user_id)
+        expect(user_ids).not_to include @current_user.id
+
+        post :refuse, params: { bill_id: @bill.id }
+        expect(response).to have_http_status :not_found
+        expect(BillEvent.count).to eq 1
+      end
+    end
+
+    it 'should not be able to refuse when current user is not added to bill' do
+      @bill = create(:bill)
+      request.headers.merge! @headers
+      post :accept, params: { bill_id: @bill.id }
+      expect(response).to have_http_status :not_found
+      expect(BillEvent.count).to eq 0
+    end
   end
 
   private

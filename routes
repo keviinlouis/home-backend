@@ -2,13 +2,13 @@
                      login POST   /login(.:format)                                                                         user#login
                         me GET    /me(.:format)                                                                            user#me
                  me_device PUT    /me/device(.:format)                                                                     user#device
-                           DELETE /me/device/:id(.:format)                                                                 user#remove_device
+                           DELETE /me/device(.:format)                                                                     user#remove_device
                 user_index GET    /user(.:format)                                                                          user#index
                            POST   /user(.:format)                                                                          user#create
                       user GET    /user/:id(.:format)                                                                      user#show
-                           PATCH  /user/:id(.:format)                                                                      user#update
-                           PUT    /user/:id(.:format)                                                                      user#update
                            DELETE /user/:id(.:format)                                                                      user#destroy
+                           PUT    /user(.:format)                                                                          user#update
+                           DELETE /user(.:format)                                                                          user#destroy
         notification_index GET    /notification(.:format)                                                                  notification#index
               notification PATCH  /notification/:id(.:format)                                                              notification#update
                            PUT    /notification/:id(.:format)                                                              notification#update

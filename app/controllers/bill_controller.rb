@@ -27,6 +27,8 @@ class BillController < ApplicationController
 
     bill.update update_params
 
+    return json_with_errors bill.errors if bill.errors.any?
+
     bill.add_event :update_details, current_user
 
     render json: bill

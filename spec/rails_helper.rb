@@ -3,6 +3,7 @@ require 'spec_helper'
 ENV['RAILS_ENV'] = 'test'
 
 if ENV.has_key? 'CODECOV_TOKEN'
+  puts 'WITH CODE COV'
   require 'simplecov'
   SimpleCov.start
 

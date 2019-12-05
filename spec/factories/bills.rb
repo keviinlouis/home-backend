@@ -9,5 +9,10 @@ FactoryBot.define do
     frequency { rand(30) }
     frequency_type { Bill.frequency_types.keys.sample }
     user
+
+    factory :bill_without_frequency do
+      frequency { nil }
+      frequency_type { nil }
+    end
   end
 end
