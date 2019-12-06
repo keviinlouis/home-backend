@@ -12,7 +12,7 @@ class InvoiceUserPaymentController < ApplicationController
   def create
     payment = @invoice_user.pay(payment_params)
 
-    render json_with_errors payment.errors unless payment.valid?
+    return render json_with_errors payment.errors unless payment.valid?
 
     render json: payment
   end
