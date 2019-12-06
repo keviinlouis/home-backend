@@ -26,8 +26,9 @@ class InvoiceUserPayment < ApplicationRecord
   end
 
   def invoice_valid?
-    return unless invoice_user.invoice.paid?
-    errors.add(:base, 'Esse pagamento já está finalizado')
-    throw :abort
+    unless invoice_user.invoice.paid?
+      errors.add(:base, 'Esse pagamento já está finalizado')
+      throw :abort
+    end
   end
 end

@@ -29,7 +29,8 @@ class InvoiceUser < ApplicationRecord
   end
 
   def backing_to_not_paid?
-    status_previous_change == :paid && (available? || pending?)
+    return if status_previous_change.blank?
+    status_previous_change[0] == "paid" && (available? || pending?)
   end
 
   def update_invoice_status
