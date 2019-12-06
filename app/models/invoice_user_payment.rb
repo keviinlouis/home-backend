@@ -17,7 +17,7 @@ class InvoiceUserPayment < ApplicationRecord
   end
 
   def update_invoice_user
-    status = if invoice_user.invoice_user_payment.empty?
+    status = if InvoiceUserPayment.find_by_invoice_user_id(id).blank?
                :available
              else
                :pending
