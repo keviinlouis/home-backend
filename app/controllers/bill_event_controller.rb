@@ -24,12 +24,4 @@ class BillEventController < ApplicationController
 
     render json: bill_event
   end
-
-  private
-
-  def create_params
-    params.permit(
-       :message
-    )
-  end
 end

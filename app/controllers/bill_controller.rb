@@ -109,14 +109,4 @@ class BillController < ApplicationController
       :bill_category_id,
     )
   end
-
-  def list_status
-    status = :active
-
-    if params.key?(:status) && BillUser.statuses.include?(params[:status])
-      status = params[:status]
-    end
-
-    status
-  end
 end
