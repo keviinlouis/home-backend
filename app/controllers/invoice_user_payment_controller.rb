@@ -18,7 +18,6 @@ class InvoiceUserPaymentController < ApplicationController
   end
 
   def destroy
-    byebug
     @payment.destroy
 
     return json_with_errors @payment.errors if @payment.errors.present?
