@@ -22,21 +22,10 @@ class InvoiceController < ApplicationController
   def show
     @invoice = Invoice.find_by_id(params[:id])
 
-    unless @invoice.bill.bill_users.find_by(user_id: current_user.id) && @invoice.present?
+    unless @invoice.present? && @invoice.bill.bill_users.find_by(user_id: current_user.id)
       return render json: {}, status: :not_found
     end
 
     render json: @invoice
-  end
-
-  private
-
-  def invoice_where_params
-    query = { invoice: {} }
-
-    query[:bill_id] = params[:bill_id] if params[:bill_id].present?
-    query[:status] = params[:status] if params[:status].present?
-
-    query
   end
 end
