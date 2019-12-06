@@ -2,7 +2,7 @@ class BillUserController < ApplicationController
   def create
     bill = current_user.bills.find_by_id(params[:bill_id])
 
-    return render json: {}, status: :not_found unless bill.present?
+    return render_not_found if bill.blank?
 
     bill.update_users params[:users]
 

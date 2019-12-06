@@ -20,14 +20,17 @@ class ApplicationController < ActionController::API
   def load_bill
     bill_id = params[:bill_id]
 
-    @bill = current_user.bills.find(bill_id)
+    @bill = current_user.bills.find_by_id(bill_id)
 
-  rescue
-    render json: {}, status: :not_found
+    render_not_found if @bill.blank?
   end
 
   def json_with_errors(errors)
     render json: { errors: errors }, status: :unprocessable_entity
+  end
+
+  def render_not_found
+    render json: {}, status: :not_found
   end
 
   def current_user

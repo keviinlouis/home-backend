@@ -5,11 +5,11 @@ class BillController < ApplicationController
   end
 
   def show
-    bill = current_user.bills.find(params[:id])
+    bill = current_user.bills.find_by_id(params[:id])
+
+    return render_not_found if bill.blank?
 
     render json: bill
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 
   def create
@@ -23,7 +23,9 @@ class BillController < ApplicationController
   end
 
   def update
-    bill = current_user.owner_bills.find(params[:id])
+    bill = current_user.owner_bills.find_by_id(params[:id])
+
+    return render_not_found if bill.blank?
 
     bill.update update_params
 
@@ -32,26 +34,24 @@ class BillController < ApplicationController
     bill.add_event :update_details, current_user
 
     render json: bill
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 
   def destroy
-    bill = current_user.bills.find(params[:id])
+    bill = current_user.bills.find_by_id(params[:id])
+
+    return render_not_found if bill.blank?
 
     bill.destroy
 
     bill.add_event :deleted, current_user
 
     render json: bill
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 
   def accept
     bill_user = BillUser.where(user_id: current_user.id, bill_id: params[:bill_id]).first
 
-    return render json: {}, status: :not_found unless bill_user.present?
+    return render_not_found unless bill_user.present?
 
     return render json: {} if bill_user.active?
 
@@ -71,7 +71,7 @@ class BillController < ApplicationController
   def refuse
     bill_user = BillUser.where(user_id: current_user.id, bill_id: params[:bill_id]).first
 
-    return render json: {}, status: :not_found unless bill_user.present?
+    return render_not_found unless bill_user.present?
 
     bill = bill_user.bill
 

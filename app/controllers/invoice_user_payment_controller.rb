@@ -12,7 +12,7 @@ class InvoiceUserPaymentController < ApplicationController
   def create
     payment = @invoice_user.pay(payment_params)
 
-    return render json_with_errors payment.errors unless payment.valid?
+    return json_with_errors payment.errors unless payment.valid?
 
     render json: payment
   end
@@ -30,14 +30,14 @@ class InvoiceUserPaymentController < ApplicationController
   def load_invoice_user
     @invoice_user = InvoiceUser.find_by(id: params[:invoice_user_id])
 
-    return render json: {}, status: :not_found if @invoice_user.blank?
+    return render_not_found if @invoice_user.blank?
 
     render json: {}, status: :forbidden unless @invoice_user.invoice.bill_user?(current_user.id)
   end
 
   def load_payment
     @payment = InvoiceUserPayment.includes(invoice_user: [:user, :invoice, bill_user: :bill]).find_by_id params[:id]
-    render json: {}, status: :not_found if @payment.blank?
+    render_not_found if @payment.blank?
   end
 
   def check_permission

@@ -18,7 +18,7 @@ class BillEventController < ApplicationController
   def destroy
     bill_event = BillEvent.where(user_id: current_user.id, id: params[:id]).first
 
-    return render json: {}, status: :not_found unless bill_event.present?
+    return render_not_found if bill_event.blank?
 
     bill_event.destroy
 
