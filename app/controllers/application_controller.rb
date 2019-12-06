@@ -1,10 +1,6 @@
 class ApplicationController < ActionController::API
   before_action :load_user
 
-  def not_found
-    render json: { error: 'not_found' }, status: :not_found
-  end
-
   def load_user
     header = request.headers['Authorization']
     header = header.split(' ').last if header

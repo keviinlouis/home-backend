@@ -18,7 +18,6 @@ RSpec.describe BillUserController, type: :controller do
     end
 
     it 'should added users successfully' do
-      request.headers.merge! @headers
       post :create, params: @data
 
       expect(response).to have_http_status :success
@@ -31,7 +30,6 @@ RSpec.describe BillUserController, type: :controller do
 
     it 'should return error when total is lower from 100' do
       @data[:users][0][:percent] = 51.0
-      request.headers.merge! @headers
       post :create, params: @data
 
       expect(response).to have_http_status :unprocessable_entity
@@ -39,7 +37,6 @@ RSpec.describe BillUserController, type: :controller do
 
     it 'should return error when total is lower than' do
       @data[:users][0][:percent] = 49.0
-      request.headers.merge! @headers
       post :create, params: @data
 
       expect(response).to have_http_status :unprocessable_entity
@@ -47,7 +44,6 @@ RSpec.describe BillUserController, type: :controller do
 
     it 'should return error when user does not exists' do
       @data[:users][0][:id] = 'wrong_id'
-      request.headers.merge! @headers
       post :create, params: @data
 
       expect(response).to have_http_status :unprocessable_entity
@@ -55,7 +51,6 @@ RSpec.describe BillUserController, type: :controller do
 
     it 'should return not found when bill does not exists' do
       @data[:bill_id] = 'wrong_id'
-      request.headers.merge! @headers
       post :create, params: @data
 
       expect(response).to have_http_status :not_found
@@ -64,7 +59,6 @@ RSpec.describe BillUserController, type: :controller do
     it 'should return not found when bill does not belongs to user' do
       @bill = create(:bill)
       @data[:bill_id] = @bill.id
-      request.headers.merge! @headers
       post :create, params: @data
 
       expect(response).to have_http_status :not_found

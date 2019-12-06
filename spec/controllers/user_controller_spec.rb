@@ -3,6 +3,29 @@ require 'rails_helper'
 RSpec.describe UserController, type: :controller do
   create_user_and_headers
 
+  describe "#load_user" do
+    it "should return a loaded user" do
+      get :me
+      expect(response).to have_http_status :success
+    end
+
+    it "should return a expired token error" do
+      payload = { id: @current_user.id }
+      expired_token = JsonWebToken.encode payload, DateTime.now - 1.day
+      @headers = { authorization: "Bearer #{expired_token}" }
+      request.headers.merge! @headers
+      get :me
+      expect(response).to have_http_status :unauthorized
+    end
+
+    it "should return a decoded error when token is not sent" do
+      @headers = { authorization: nil }
+      request.headers.merge! @headers
+      get :me
+      expect(response).to have_http_status :unauthorized
+    end
+  end
+
   describe '#login' do
     context 'when credentials are correct' do
       context 'should return user data with token' do
@@ -38,7 +61,6 @@ RSpec.describe UserController, type: :controller do
   end
   describe '#me' do
     it 'should return user data without token' do
-      request.headers.merge! @headers
       get :me
       match_user_response(without_auth: true)
     end
@@ -48,7 +70,6 @@ RSpec.describe UserController, type: :controller do
       it 'when the device exists' do
         fcm_token = 'new_fcm_token'
         device = @current_user.device.create
-        request.headers.merge! @headers
         put :device, params: { device_id: device.id, token: fcm_token }
         device.reload
         expect(response).to have_http_status(:success)
@@ -57,7 +78,6 @@ RSpec.describe UserController, type: :controller do
       it 'when the device not exists' do
         fcm_token = 'new_fcm_token'
         device = @current_user.device.create
-        request.headers.merge! @headers
         put :device, params: { device_id: 'wrong_device_id', token: fcm_token }
         device.reload
         expect(response).to have_http_status(:not_found)
@@ -69,13 +89,11 @@ RSpec.describe UserController, type: :controller do
     context 'should remove device' do
       it 'when the device exists' do
         device = @current_user.device.create
-        request.headers.merge! @headers
         delete :remove_device, params: { device_id: device.id }
         expect(response).to have_http_status(:success)
         expect(Device.find_by(id: device.id)).to be_nil
       end
       it 'when the device not exists' do
-        request.headers.merge! @headers
         delete :remove_device, params: { device_id: 'wrong_device_id' }
         expect(response).to have_http_status(:success)
         expect(Device.count).to eq 0
@@ -88,7 +106,6 @@ RSpec.describe UserController, type: :controller do
       create_list(:user, @total_users)
     end
     it 'should return all users without current user' do
-      request.headers.merge! @headers
       get :index
       body_response = JSON.parse(response.body)
       expect(body_response.count).to eq @total_users
@@ -97,7 +114,6 @@ RSpec.describe UserController, type: :controller do
 
     it 'should return all users without current user and excluded users' do
       excluded_user = User.last
-      request.headers.merge! @headers
       get :index, params: { exclude: [excluded_user.id] }
       body_response = JSON.parse(response.body)
       expect(body_response.count).to eq @total_users - 1
@@ -170,7 +186,6 @@ RSpec.describe UserController, type: :controller do
     it 'should update user data' do
       new_name = 'new name'
       new_email = 'new@mail.com'
-      request.headers.merge! @headers
       put :update, params: { name: new_name, email: new_email }
       @current_user.reload
       match_user_response(without_auth: true)
@@ -181,7 +196,6 @@ RSpec.describe UserController, type: :controller do
     it 'should update user data even when is same email' do
       new_name = 'new name'
       new_email = @current_user.email
-      request.headers.merge! @headers
       put :update, params: { name: new_name, email: new_email }
       @current_user.reload
       match_user_response(without_auth: true)
@@ -194,7 +208,6 @@ RSpec.describe UserController, type: :controller do
       old_email = @current_user.reload.email
       new_name = 'new name'
       new_email = other_user.email
-      request.headers.merge! @headers
       put :update, params: { name: new_name, email: new_email }
       expect(response).to have_http_status(:unprocessable_entity)
       json_response = JSON.parse(response.body)
@@ -207,7 +220,6 @@ RSpec.describe UserController, type: :controller do
     context 'when trying to update password' do
       it 'should return update password' do
         new_password = 'new_password'
-        request.headers.merge! @headers
         put :update, params: { password: new_password, password_confirmation: new_password }
         expect(response).to have_http_status(:success)
         match_user_response(without_auth: true)
@@ -217,7 +229,6 @@ RSpec.describe UserController, type: :controller do
 
       it 'should return password dont match' do
         new_password = 'new_password'
-        request.headers.merge! @headers
         put :update, params: { password: new_password, password_confirmation: 'wrong_password_confirmation' }
         expect(response).to have_http_status(:unprocessable_entity)
       end
@@ -226,7 +237,6 @@ RSpec.describe UserController, type: :controller do
 
   describe '#destroy' do
     it 'should delete user' do
-      request.headers.merge! @headers
       delete :destroy
       expect(response).to have_http_status(:success)
       expect(User.count).to eq 0

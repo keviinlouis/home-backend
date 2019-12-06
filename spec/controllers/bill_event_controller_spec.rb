@@ -12,7 +12,6 @@ RSpec.describe BillEventController, type: :controller do
     end
 
     it 'should list limit size events from bill and from current_user' do
-      request.headers.merge! @headers
       get :index, params: { bill_id: @bill.id, limit: @limit }
       expect(response).to have_http_status :success
       data = JSON.parse response.body
@@ -23,7 +22,6 @@ RSpec.describe BillEventController, type: :controller do
     end
 
     it 'should list second page events from bill and from current_user' do
-      request.headers.merge! @headers
       get :index, params: { bill_id: @bill.id, limit: @limit, page: 2 }
       expect(response).to have_http_status :success
       data = JSON.parse response.body
@@ -34,14 +32,12 @@ RSpec.describe BillEventController, type: :controller do
     end
 
     it 'should return not found when bill does not exists' do
-      request.headers.merge! @headers
       get :index, params: { bill_id: 'wrong_id', limit: @limit }
       expect(response).to have_http_status :not_found
     end
 
     it 'should return not found when bill does not belongs to current user' do
       bill = create(:bill)
-      request.headers.merge! @headers
       get :index, params: { bill_id: bill.id, limit: @limit }
       expect(response).to have_http_status :not_found
     end
@@ -54,7 +50,6 @@ RSpec.describe BillEventController, type: :controller do
       expect(BillEvent.count).to eq 0
     end
     it 'should create a event of type message' do
-      request.headers.merge! @headers
       post :create, params: { bill_id: @bill.id, message: @message }
       expect(response).to have_http_status :success
       data = JSON.parse response.body
@@ -62,7 +57,6 @@ RSpec.describe BillEventController, type: :controller do
       expect(BillEvent.count).to eq 1
     end
     it 'should return not found when bill does not exists' do
-      request.headers.merge! @headers
       post :create, params: { bill_id: 'wrong_id', message: @message }
       expect(response).to have_http_status :not_found
       expect(BillEvent.count).to eq 0
@@ -70,7 +64,6 @@ RSpec.describe BillEventController, type: :controller do
 
     it 'should return not found when bill does not belongs to current user' do
       bill = create(:bill)
-      request.headers.merge! @headers
       post :create, params: { bill_id: bill.id, message: @message }
       expect(response).to have_http_status :not_found
       expect(BillEvent.count).to eq 0
@@ -85,19 +78,16 @@ RSpec.describe BillEventController, type: :controller do
     end
 
     it 'should successfully destroy event' do
-      request.headers.merge! @headers
       delete :destroy, params: { id: @event.id }
       expect(response).to have_http_status :success
     end
 
     it 'should not destroy event when event does not exists' do
-      request.headers.merge! @headers
       delete :destroy, params: { id: 'wrong_id' }
       expect(response).to have_http_status :not_found
     end
 
     it 'should not destroy event when event does not belongs to current_user' do
-      request.headers.merge! @headers
       event = create(:bill_event)
       delete :destroy, params: { id: event.id }
       expect(response).to have_http_status :not_found

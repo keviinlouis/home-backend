@@ -11,7 +11,6 @@ RSpec.describe BillController, type: :controller do
     end
 
     it 'should list limit size bills from current_user' do
-      request.headers.merge! @headers
       get :index, params: { limit: @limit }
       expect(response).to have_http_status :success
       data = JSON.parse response.body
@@ -23,7 +22,6 @@ RSpec.describe BillController, type: :controller do
     end
 
     it 'should list second page bills from current_user' do
-      request.headers.merge! @headers
       get :index, params: { limit: @limit, page: 2 }
       expect(response).to have_http_status :success
       data = JSON.parse response.body
@@ -43,14 +41,12 @@ RSpec.describe BillController, type: :controller do
       compare_bill_response @bill, @current_user
     end
     it 'should return not found when the bill do not exists' do
-      request.headers.merge! @headers
       get :show, params: { id: 'wrong_id' }
       expect(response).to have_http_status :not_found
     end
 
     it 'should return not found when the bill do not belongs to user' do
       new_bill = create(:bill)
-      request.headers.merge! @headers
       get :show, params: { id: new_bill.id }
       expect(response).to have_http_status :not_found
     end
@@ -116,7 +112,6 @@ RSpec.describe BillController, type: :controller do
     before(:each) do
       Sidekiq::ScheduledSet.new.clear
       @bill = create(:bill, user: @current_user)
-      expect(Sidekiq::ScheduledSet.new.count).to eq 1
       @data = {
         id: @bill.id,
         name: 'New Name',
@@ -130,7 +125,6 @@ RSpec.describe BillController, type: :controller do
     it 'should update all data successfully' do
       expect(Sidekiq::ScheduledSet.new.count).to eq 1
 
-      request.headers.merge! @headers
       put :update, params: @data
       expect(response).to have_http_status :success
       bill = JSON.parse response.body
@@ -151,7 +145,6 @@ RSpec.describe BillController, type: :controller do
       @data.delete(:frequency_type)
       @data[:id] = @bill.id
 
-      request.headers.merge! @headers
       put :update, params: @data
       expect(response).to have_http_status :unprocessable_entity
     end
@@ -162,7 +155,6 @@ RSpec.describe BillController, type: :controller do
       @data.delete(:frequency)
       @data[:id] = @bill.id
 
-      request.headers.merge! @headers
       put :update, params: @data
       expect(response).to have_http_status :unprocessable_entity
     end
@@ -171,7 +163,6 @@ RSpec.describe BillController, type: :controller do
       expect(Sidekiq::ScheduledSet.new.count).to eq 1
       @bill.update expires_at: nil
       @data[:expires_at] = DateTime.now - 1.day
-      request.headers.merge! @headers
       put :update, params: @data
       expect(response).to have_http_status :unprocessable_entity
     end
@@ -179,7 +170,6 @@ RSpec.describe BillController, type: :controller do
     it 'should not remove if bill do not belongs to current_user' do
       @bill = create(:bill)
       @data[:id] = @bill.id
-      request.headers.merge! @headers
       put :update, params: @data
       expect(response).to have_http_status :not_found
     end
@@ -191,7 +181,6 @@ RSpec.describe BillController, type: :controller do
 
     it 'should remove bill and all dependents' do
       @bill = create(:bill, user: @current_user)
-      request.headers.merge! @headers
       delete :destroy, params: { id: @bill.id }
       expect(Bill.count).to eq 0
       expect(Invoice.count).to eq 1
@@ -201,7 +190,6 @@ RSpec.describe BillController, type: :controller do
 
     it 'should remove not bill when bill do not belongs to current_user' do
       @bill = create(:bill)
-      request.headers.merge! @headers
       delete :destroy, params: { id: @bill.id }
       expect(Bill.count).to eq 1
       expect(Invoice.count).to eq 1
@@ -228,7 +216,6 @@ RSpec.describe BillController, type: :controller do
       end
 
       it 'should be able to accept a bill that current user has been added' do
-        request.headers.merge! @headers
         post :accept, params: { bill_id: @bill.id }
         expect(response).to have_http_status :success
 
@@ -245,7 +232,6 @@ RSpec.describe BillController, type: :controller do
       end
 
       it 'should be able to accept even when current user is already accepted' do
-        request.headers.merge! @headers
         post :accept, params: { bill_id: @bill.id }
         expect(response).to have_http_status :success
 
@@ -262,7 +248,6 @@ RSpec.describe BillController, type: :controller do
 
     it 'should not be able to accept when current user is not added to bill' do
       @bill = create(:bill)
-      request.headers.merge! @headers
       post :accept, params: { bill_id: @bill.id }
       expect(response).to have_http_status :not_found
       expect(BillEvent.count).to eq 0
@@ -284,7 +269,6 @@ RSpec.describe BillController, type: :controller do
       end
 
       it 'should be able to refuse a bill' do
-        request.headers.merge! @headers
         post :refuse, params: { bill_id: @bill.id }
         expect(response).to have_http_status :success
         expect(BillEvent.count).to eq 1
@@ -295,7 +279,6 @@ RSpec.describe BillController, type: :controller do
       end
 
       it 'should not be able to refuse when current user is already refused' do
-        request.headers.merge! @headers
         post :refuse, params: { bill_id: @bill.id }
         expect(response).to have_http_status :success
         expect(BillEvent.count).to eq 1
@@ -312,7 +295,6 @@ RSpec.describe BillController, type: :controller do
 
     it 'should not be able to refuse when current user is not added to bill' do
       @bill = create(:bill)
-      request.headers.merge! @headers
       post :accept, params: { bill_id: @bill.id }
       expect(response).to have_http_status :not_found
       expect(BillEvent.count).to eq 0
@@ -328,7 +310,6 @@ RSpec.describe BillController, type: :controller do
   end
 
   def compare_bill_response(bill, user)
-    request.headers.merge! @headers
     get :show, params: { id: bill.id }
     expect(response).to have_http_status :success
     bill_response = JSON.parse response.body
@@ -344,7 +325,6 @@ RSpec.describe BillController, type: :controller do
   end
 
   def create_success_bill(data)
-    request.headers.merge! @headers
     post :create, params: data
     expect(response).to have_http_status :success
     expect(Bill.count).to eq 1
@@ -358,7 +338,6 @@ RSpec.describe BillController, type: :controller do
   end
 
   def create_fail_bill(data)
-    request.headers.merge! @headers
     post :create, params: data
 
     expect(response).to have_http_status(:unprocessable_entity)
