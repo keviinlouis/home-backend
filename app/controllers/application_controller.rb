@@ -7,7 +7,7 @@ class ApplicationController < ActionController::API
 
     begin
       decoded = JsonWebToken.decode(header)
-      @user = User.find_by_id decoded[:id]
+      @user = User.find decoded[:id]
     rescue ActiveRecord::RecordNotFound => e
       render json: { errors: e.message }, status: :unauthorized
     rescue JWT::ExpiredSignature => e

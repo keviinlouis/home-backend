@@ -27,7 +27,7 @@ RSpec.describe UserController, type: :controller do
 
     it "should return a not found user" do
       payload = { id: 'wrong_id' }
-      expired_token = JsonWebToken.encode payload, DateTime.now - 1.day
+      expired_token = JsonWebToken.encode payload
       @headers = { authorization: "Bearer #{expired_token}" }
       request.headers.merge! @headers
       get :me
