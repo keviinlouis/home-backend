@@ -33,6 +33,10 @@ class BillController < ApplicationController
 
     bill.add_event :update_details, current_user
 
+    bill.bill_users.where.not(user_id: current_user.id).each do |bill_user|
+      Notification.notify_bill_edited bill_user.user, bill
+    end
+
     render json: bill
   end
 
