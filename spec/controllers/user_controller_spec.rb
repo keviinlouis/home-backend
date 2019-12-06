@@ -24,6 +24,15 @@ RSpec.describe UserController, type: :controller do
       get :me
       expect(response).to have_http_status :unauthorized
     end
+
+    it "should return a not found user" do
+      payload = { id: 'wrong_id' }
+      expired_token = JsonWebToken.encode payload, DateTime.now - 1.day
+      @headers = { authorization: "Bearer #{expired_token}" }
+      request.headers.merge! @headers
+      get :me
+      expect(response).to have_http_status :unauthorized
+    end
   end
 
   describe '#login' do
