@@ -28,6 +28,28 @@ RSpec.describe BillUserController, type: :controller do
       expect(Notification.count).to eq 1
     end
 
+    it 'should remove users successfully' do
+      post :create, params: @data
+
+      expect(response).to have_http_status :success
+      @bill.reload
+      @data = {
+        bill_id: @bill.id,
+        users: [
+          { id: @current_user.id, percent: 100.0 }
+        ]
+      }
+
+      post :create, params: @data
+
+      expect(response).to have_http_status :success
+
+      @bill.reload
+      expect(@bill.bill_users.count).to eq 1
+      expect(@bill.bill_users.map(&:next_percent).sum).to eq 0
+      expect(BillEvent.count).to eq 2
+    end
+
     it 'should return error when total is lower from 100' do
       @data[:users][0][:percent] = 51.0
       post :create, params: @data

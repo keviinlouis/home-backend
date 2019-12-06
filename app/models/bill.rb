@@ -66,7 +66,7 @@ class Bill < ApplicationRecord
   end
 
   def schedule_next_invoice
-    return unless frequency? && frequency_type?
+    return unless repeats?
     update_column :next_invoice_jid, InvoiceWorker.perform_at(created_at + (frequency.send(frequency_type) * invoices.size), bill_id: id)
   end
 
@@ -92,14 +92,8 @@ class Bill < ApplicationRecord
     @last_invoice ||= invoices.order(created_at: :desc).first
   end
 
-  def date_to_next_invoice
-    last_date = last_invoice ? last_invoice.expires_at : DateTime.now
-    last_date + frequency.send(frequency_type) if frequency? && frequency_type?
-    last_date
-  end
-
   def update_users(users)
-    users = users.map {|t| t.transform_keys(&:to_sym)}
+    users = users.map { |t| t.transform_keys(&:to_sym) }
 
     total_percent = users.map { |user| user[:percent].to_f }.sum
 
@@ -127,12 +121,17 @@ class Bill < ApplicationRecord
     last_invoice.update_invoice_users if last_invoice&.available?
   end
 
-  def rollback_all_users
-    bill_users.reload.each { |bill_user| bill_user.update status: :active, next_percent: nil, next_amount: nil }
+  def remove_next_state_users
+    bill_users.each do |bill_user|
+      unless bill_user.percent.present?
+        bill_user.delete
+        next
+      end
 
-    bill_users.without_percent.destroy_all
+      bill_user.update status: :active, next_percent: nil
+    end
 
-    last_invoice.update_invoice_users if last_invoice&.available?
+    attribute_leftovers_to_owner
   end
 
   def pending_users?
@@ -153,19 +152,6 @@ class Bill < ApplicationRecord
 
   def repeats?
     frequency? && frequency_type?
-  end
-
-  def remove_next_state_users
-    bill_users.each do |bill_user|
-      unless bill_user.percent.present?
-        bill_user.delete
-        next
-      end
-
-      bill_user.update status: :active, next_percent: nil
-    end
-
-    attribute_leftovers_to_owner
   end
 
   def attribute_leftovers_to_owner(options = {})
