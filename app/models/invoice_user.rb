@@ -8,8 +8,13 @@ class InvoiceUser < ApplicationRecord
 
   enum status: [:available, :paid, :pending, :expired, :canceled]
 
+  after_update :update_invoice_status, if: :backing_to_not_paid?
+
   def pay(payment_data)
     payment = invoice_user_payment.create(payment_data)
+
+    return payment unless payment.valid?
+
     update status: can_be_marked_as_payed? ? :paid : :pending
     invoice.update_status_if_everyone_paid
     payment
@@ -21,5 +26,15 @@ class InvoiceUser < ApplicationRecord
 
   def can_be_marked_as_payed?
     amount <= total_payed
+  end
+
+  def backing_to_not_paid?
+    status_previous_change == :paid && (available? || pending?)
+  end
+
+  def update_invoice_status
+    return unless invoice.paid?
+
+    invoice.available!
   end
 end
