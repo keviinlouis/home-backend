@@ -4,7 +4,7 @@ class NotificationController < ApplicationController
   def index
     page = params[:page] || 1
     limit = params[:limit] || 20
-    render json: current_user.notification.limit(limit).page(page)
+    render json: current_user.notification.order(created_at: :desc).limit(limit).page(page)
   end
 
   def update

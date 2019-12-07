@@ -34,8 +34,8 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
     image: postgres
-    volumes:
-    - ./tmp/db:/var/lib/postgresql/data
+#    volumes:
+#    - ./tmp/db:/var/lib/postgresql/data
 
   elasticsearch:
     container_name: home_elasticsearch
