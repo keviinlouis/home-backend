@@ -168,7 +168,7 @@ class Bill < ApplicationRecord
 
     owner = owner_user_in_bill_users
 
-    owner.update percent: owner.percent + leftovers_percent if options[:in_next_percent]
+    owner.update percent: owner.percent + leftovers_percent unless options[:in_next_percent]
     owner.update next_percent: owner.next_percent + leftovers_percent if options[:in_next_percent]
   end
 

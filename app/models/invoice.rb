@@ -9,7 +9,7 @@ class Invoice < ApplicationRecord
 
   def create_invoice_users
     bill.bill_users.each do |bill_user|
-      create_invoice_user_by_bill_user bill_user
+      create_invoice_user bill_user
     end
   end
 
@@ -17,13 +17,13 @@ class Invoice < ApplicationRecord
     bill.bill_users.with_percent.each do |bill_user|
       invoice_user = invoice_users.where(user_id: bill_user.user_id, status: :available).first
 
-      return create_invoice_user_by_bill_user(bill_user) if invoice_user.nil?
+      return create_invoice_user(bill_user) if invoice_user.nil?
 
       update_invoice_user(invoice_user, bill_user)
     end
   end
 
-  def create_invoice_user_by_bill_user(bill_user)
+  def create_invoice_user(bill_user)
     invoice_users.create(
       amount: bill_user.amount,
       expires_at: expires_at,

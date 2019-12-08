@@ -183,6 +183,7 @@ RSpec.describe InvoiceUserPaymentController, type: :controller do
       end
 
       it 'should be able to delete a payment' do
+        @invoice.paid!
         delete :destroy, params: { id: @invoice_user_payment.id }
         expect(response).to have_http_status :success
         expect(@invoice_user.reload.status).to eq "available"
