@@ -53,8 +53,9 @@ class Bill < ApplicationRecord
 
   def create_invoice
     status = pending_users? ? :pending : :available
-    invoices.create(amount: amount, number: invoices.count, status: status)
+    invoice = invoices.create(amount: amount, number: invoices.count, status: status)
     schedule_next_invoice
+    invoice
   end
 
   def update_or_create_invoice

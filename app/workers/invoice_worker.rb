@@ -2,7 +2,10 @@ class InvoiceWorker
   include Sidekiq::Worker
 
   def perform(data)
-    bill = Bill.find data["bill_id"]
+    data = data.transform_keys(&:to_sym)
+    bill = Bill.find_by_id data[:bill_id]
+    return if bill.blank?
+
     bill.create_invoice
   end
 
