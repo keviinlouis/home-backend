@@ -20,12 +20,4 @@ RSpec.describe InvoiceWorker do
       expect(invoice).to be_nil
     end
   end
-  describe 'cancel!' do
-    it 'should create a new invoice' do
-      bill = create(:bill)
-      expect(Invoice.count).to eq 1
-      @worker.perform bill_id: bill.id
-      expect(Invoice.count).to eq 2
-    end
-  end
 end
