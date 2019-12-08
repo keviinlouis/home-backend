@@ -125,6 +125,15 @@ RSpec.describe BillController, type: :controller do
     it 'should update all data successfully' do
       expect(Sidekiq::ScheduledSet.new.count).to eq 1
 
+      @other_user = create(:user)
+      users = [
+          { id: @other_user.id, percent: 50.0 },
+          { id: @current_user.id, percent: 50.0 }
+        ]
+
+      @bill.update_users users
+      @bill.active_all_users
+
       put :update, params: @data
       expect(response).to have_http_status :success
       bill = JSON.parse response.body
@@ -137,6 +146,7 @@ RSpec.describe BillController, type: :controller do
       expect(@bill.frequency).to eq @data[:frequency]
       expect(@bill.frequency_type).to eq @data[:frequency_type]
       expect(@bill.description).to eq @data[:description]
+      expect(Notification.count).to eq 1
     end
 
     it 'should return error when have frequency but frequency_type is blank' do
@@ -359,16 +369,7 @@ RSpec.describe BillController, type: :controller do
     expect(bill_response["description"]).to eq data[:description]
     expect(bill_response["last_invoice"]).not_to be_nil
     expect(bill_response["last_invoice"]["status"]).to eq "available"
-    expect(bill_response["bill_users"].count).to eq 1
+    expect(bill_response["bill_users"].count).not_to eq 0
     expect(bill_response["owner"]["id"]).to eq user.id
-    first_bill_user = bill_response["bill_users"].first
-    expect(first_bill_user["id"]).to eq user.id
-    expect(first_bill_user["amount"]).to eq data[:amount]
-    expect(first_bill_user["percent"]).to eq 100
-    expect(first_bill_user["next_amount"]).to be_nil
-    expect(first_bill_user["next_percent"]).to be_nil
-    expect(first_bill_user["last_invoice"]).not_to be_nil
-    expect(first_bill_user["last_invoice"]["status"]).to eq "available"
-    expect(first_bill_user["last_invoice"]["amount"]).to eq data[:amount]
   end
 end

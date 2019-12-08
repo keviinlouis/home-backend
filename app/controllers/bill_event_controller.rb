@@ -5,8 +5,8 @@ class BillEventController < ApplicationController
     page = params[:page] || 1
     limit = params[:limit] || 20
     events = @bill.bill_events
-      .order(created_at: :desc)
-      .paginate(page: page, per_page: limit)
+               .order(created_at: :desc)
+               .paginate(page: page, per_page: limit)
     render json: events
   end
 

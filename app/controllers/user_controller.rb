@@ -30,7 +30,7 @@ class UserController < ApplicationController
 
   def device
     device = Device.where(id: params[:device_id], user: current_user).first
-    return render json: {errors: 'Aparelho não encontrado'}, status: :not_found if device.blank?
+    return render json: { errors: 'Aparelho não encontrado' }, status: :not_found if device.blank?
     device.update fcm_token: params[:token]
     render json: device
   end

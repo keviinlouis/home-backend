@@ -6,7 +6,7 @@ class InvoiceController < ApplicationController
     bill = params[:bill]
 
     query = Invoice.joins(bill: :bill_users)
-              .where(bill: {bill_users: { user_id: current_user.id }})
+              .where(bill: { bill_users: { user_id: current_user.id } })
 
     if status && InvoiceUser.statuses.include?(status)
       query = query.where(status: status)
