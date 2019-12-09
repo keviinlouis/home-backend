@@ -11,7 +11,6 @@ if ENV.has_key? 'CODECOV_TOKEN'
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 
-
 require File.expand_path('../config/environment', __dir__)
 
 # Prevent database truncation if the environment is production
