@@ -3,6 +3,9 @@ addons:
 before_script:
   - cp config/database.yml.travis config/database.yml
   - psql -c 'create database travis_ci_test;' -U postgres
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 dist: trusty
 language: ruby
 rvm:
@@ -10,10 +13,13 @@ rvm:
 script:
   - bundle exec rails db:migrate
   - bundle exec rspec
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 services:
   - redis-server
 env:
   global:
     - RAILS_ENV=test
     - CODECOV_TOKEN=bdc37889-819f-4f8d-b47e-8ce0b9d1790b
+    - CC_TEST_REPORTER_ID=b6a71a48f15e3041fd3b7c59ddace02bea26b8c8a1a2909f2eccd2a3be8d627f
     - FCM_AUTH_KEY=key
