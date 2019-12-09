@@ -112,6 +112,8 @@ RSpec.describe BillController, type: :controller do
     before(:each) do
       Sidekiq::ScheduledSet.new.clear
       @bill = create(:bill, user: @current_user)
+
+      expect(Sidekiq::ScheduledSet.new.count).to eq 1
       @data = {
         id: @bill.id,
         name: 'New Name',
@@ -123,8 +125,6 @@ RSpec.describe BillController, type: :controller do
     end
 
     it 'should update all data successfully' do
-      expect(Sidekiq::ScheduledSet.new.count).to eq 1
-
       @other_user = create(:user)
       users = [
           { id: @other_user.id, percent: 50.0 },
@@ -150,7 +150,6 @@ RSpec.describe BillController, type: :controller do
     end
 
     it 'should return error when have frequency but frequency_type is blank' do
-      expect(Sidekiq::ScheduledSet.new.count).to eq 1
       @bill = create(:bill_without_frequency, user: @current_user)
       @data.delete(:frequency_type)
       @data[:id] = @bill.id
@@ -160,7 +159,6 @@ RSpec.describe BillController, type: :controller do
     end
 
     it 'should return error when have frequency_type but frequency is blank' do
-      expect(Sidekiq::ScheduledSet.new.count).to eq 1
       @bill = create(:bill_without_frequency, user: @current_user)
       @data.delete(:frequency)
       @data[:id] = @bill.id
@@ -170,7 +168,6 @@ RSpec.describe BillController, type: :controller do
     end
 
     it 'should return error when expires_at is in past' do
-      expect(Sidekiq::ScheduledSet.new.count).to eq 1
       @bill.update expires_at: nil
       @data[:expires_at] = DateTime.now - 1.day
       put :update, params: @data
@@ -183,7 +180,79 @@ RSpec.describe BillController, type: :controller do
       put :update, params: @data
       expect(response).to have_http_status :not_found
     end
+
+    it 'should update invoice user to pending when amount has been updated' do
+      @other_user = create(:user)
+      users = [
+        { id: @other_user.id, percent: 50.0 },
+        { id: @current_user.id, percent: 50.0 }
+      ]
+
+      @bill.update_users users
+      @bill.active_all_users
+      invoice_user = @bill.invoices.first.invoice_users.first
+      invoice_user.pay(amount: @bill.amount/2)
+      expect(invoice_user.paid?).to be_truthy
+      put :update, params: @data
+      expect(response).to have_http_status :success
+      invoice_user.reload
+      @bill.reload
+      expect(invoice_user.amount).to eq @bill.amount / 2
+      expect(invoice_user.pending?).to be_truthy
+    end
+
+    it 'should not update invoice user to pending when amount has been updated' do
+      @other_user = create(:user)
+      users = [
+        { id: @other_user.id, percent: 50.0 },
+        { id: @current_user.id, percent: 50.0 }
+      ]
+
+      @data[:amount] = @bill.amount - 1
+
+      @bill.update_users users
+      @bill.active_all_users
+      invoice_user = @bill.invoices.first.invoice_users.first
+      invoice_user.pay(amount: @bill.amount/2)
+      expect(invoice_user.paid?).to be_truthy
+      put :update, params: @data
+      expect(response).to have_http_status :success
+      invoice_user.reload
+      @bill.reload
+      expect(invoice_user.amount).to eq @bill.amount / 2
+      expect(invoice_user.paid?).to be_truthy
+    end
+
+    it 'should not update invoice user to pending when invoice is already paid' do
+      @other_user = create(:user)
+      users = [
+        { id: @other_user.id, percent: 50.0 },
+        { id: @current_user.id, percent: 50.0 }
+      ]
+
+      @data[:amount] = @bill.amount - 1
+
+      @bill.update_users users
+      @bill.active_all_users
+      @invoice = @bill.invoices.first
+      invoice_user = @invoice.invoice_users.first
+      another_invoice_user = @invoice.invoice_users.last
+      invoice_user.pay(amount: @bill.amount/2)
+      another_invoice_user.pay(amount: @bill.amount/2)
+      @invoice.paid!
+      expect(invoice_user.paid?).to be_truthy
+      expect(another_invoice_user.paid?).to be_truthy
+      put :update, params: @data
+      expect(response).to have_http_status :success
+      invoice_user.reload
+      another_invoice_user.reload
+      @bill.reload
+      expect(invoice_user.amount).not_to eq @bill.amount / 2
+      expect(invoice_user.paid?).to be_truthy
+      expect(another_invoice_user.paid?).to be_truthy
+    end
   end
+
   describe '#destroy' do
     before(:each) do
       Sidekiq::ScheduledSet.new.clear

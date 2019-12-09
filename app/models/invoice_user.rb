@@ -8,6 +8,8 @@ class InvoiceUser < ApplicationRecord
 
   enum status: [:available, :paid, :pending, :expired, :canceled]
 
+  after_update :update_status, if: :amount_has_been_changed?
+
   def pay(payment_data)
     payment = invoice_user_payment.create(payment_data)
 
@@ -24,5 +26,9 @@ class InvoiceUser < ApplicationRecord
 
   def can_be_marked_as_payed?
     amount <= total_payed
+  end
+
+  def update_status
+    pending! unless can_be_marked_as_payed?
   end
 end

@@ -14,8 +14,10 @@ class Invoice < ApplicationRecord
   end
 
   def update_invoice_users
+    return if paid?
+
     bill.bill_users.with_percent.each do |bill_user|
-      invoice_user = invoice_users.where(user_id: bill_user.user_id, status: :available).first
+      invoice_user = invoice_users.where(user_id: bill_user.user_id).first
 
       return create_invoice_user(bill_user) if invoice_user.nil?
 
@@ -37,13 +39,12 @@ class Invoice < ApplicationRecord
     invoice_user.update(
       amount: bill_user.amount,
       expires_at: expires_at,
-      status: status,
       bill_user: bill_user
     )
   end
 
   def update_status_if_everyone_paid
-    update status: :paid unless invoice_users.where.not(status: :paid).exists?
+    paid! unless invoice_users.where.not(status: :paid).exists?
   end
 
   def bill_user?(id)

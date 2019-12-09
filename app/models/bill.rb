@@ -21,7 +21,7 @@ class Bill < ApplicationRecord
   after_create :add_owner_user_to_bill
   after_create :create_invoice
 
-  after_update :update_amount_on_bill_users
+  after_update :update_amount_on_bill_users, if: :amount_has_been_changed?
   after_update :update_or_create_invoice
   after_update :update_invoice_worker, if: :timestamps_changed?
 
@@ -214,5 +214,4 @@ class Bill < ApplicationRecord
 
     timestamps.any? { |attribute| saved_changes[attribute].present? }
   end
-
 end
