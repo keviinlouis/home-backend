@@ -117,7 +117,7 @@ class Bill < ApplicationRecord
   end
 
   def active_all_users
-    bill_users.reload.each { |bill_user| bill_user.update status: :active }
+    bill_users.reload.each(&:active!)
 
     last_invoice.update_invoice_users if last_invoice&.available?
   end
