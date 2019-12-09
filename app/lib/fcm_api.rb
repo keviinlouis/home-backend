@@ -28,7 +28,12 @@ class FcmApi
   end
 
   def request(method, url, data = {}, headers = {}, options = {})
-    response = RestClient::Request.execute(method: method, url: build_url(url), payload: data.to_json, headers: headers.merge(headers(options)))
+    response = RestClient::Request.execute(
+      method: method,
+      url: build_url(url),
+      payload: data.to_json,
+      headers: headers.merge(headers(options))
+    )
 
     return response if options[:no_parse]
 

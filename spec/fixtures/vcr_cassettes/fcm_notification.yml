@@ -1,0 +1,56 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://fcm.googleapis.com/fcm/send
+    body:
+      encoding: UTF-8
+      string: '{"notification":{"body":"Around the survivors a perimeter create.","title":"Matisse"},"data":{"id":1,"type":"Bill","click_action":"FLUTTER_NOTIFICATION_CLICK"},"registration_ids":["dbSdyGZMens:APA91bH7iemzNbfRjhw6JZ29i9MdsnysZJmxLf_z3Nyw-D8UEHjqaWEsK0In7kcQMhf5rNeecxXZubyEg7JaL-FurFsDtdIzqAIN-NTcKfdSvmxOLzhmiIgcy-sRO_tTTgEv9z7-qs-a"],"priority":"high"}'
+    headers:
+      Accept:
+      - "*/*"
+      User-Agent:
+      - rest-client/2.1.0 (linux-gnu x86_64) ruby/2.6.4p104
+      Authorization:
+      - key=AAAAimsF8i4:APA91bEVoYjiN4vcJfNLi8tg5iF2_CEbiri1q-EmoeoyhkHKVFLZ7TXVUFd5XkNBu6np0eK78cX8WjOEXB-DJYxOpjdA98J4RqLK76oJXFLTnggrQaMbQZRQMGacB1MAGNeLUrp1cMu0
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '354'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Host:
+      - fcm.googleapis.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 09 Dec 2019 15:34:29 GMT
+      Expires:
+      - Mon, 09 Dec 2019 15:34:29 GMT
+      Cache-Control:
+      - private, max-age=0
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Xss-Protection:
+      - 1; mode=block
+      Server:
+      - GSE
+      Alt-Svc:
+      - quic=":443"; ma=2592000; v="46,43",h3-Q050=":443"; ma=2592000,h3-Q049=":443";
+        ma=2592000,h3-Q048=":443"; ma=2592000,h3-Q046=":443"; ma=2592000,h3-Q043=":443";
+        ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: '{"multicast_id":2204288839680413401,"success":1,"failure":0,"canonical_ids":0,"results":[{"message_id":"0:1575905669754902%0765402e0765402e"}]}'
+    http_version: 
+  recorded_at: Mon, 09 Dec 2019 15:34:29 GMT
+recorded_with: VCR 5.0.0

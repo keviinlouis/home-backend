@@ -6,5 +6,6 @@ FactoryBot.define do
     description { Faker::Quote.yoda }
     user
     resource { create(:bill, user: user) }
+    status { :created }
   end
 end

@@ -79,6 +79,8 @@ group :test do
   gem 'chromedriver-helper'
   gem 'database_cleaner'
   gem 'codecov', :require => false
+  gem 'vcr'
+  gem 'webmock'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
